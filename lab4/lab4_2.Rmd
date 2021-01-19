@@ -50,7 +50,7 @@ filter(fish, length >= 350)
 
 Using the `!` operator allows for the exclusion of specific observations.
 ```{r}
-filter(fish, lakeid != "AL")
+filter(fish, lakeid != "AL",lakeid!="AR")
 ```
 
 ## Using `filter()` with multiple observations  
@@ -72,22 +72,25 @@ filter(fish, near(radii_length_mm, 2, tol = 0.2))
 ## Practice
 1. Filter the `fish` data to include the samples from lake "BO".
 ```{r}
-
+filter(fish,lakeid=="BO")
 ```
 
 2. Filter the data to include all lakes except "AR".
 ```{r}
-
+filter(fish,lakeid!="AR")
 ```
 
 3. Filter the fish data to include all fish with a scalelength within 0.25 of 8.
 ```{r}
-
+filter(fish,near(scalelength,8,tol=.25))
 ```
 
 4. Filter the fish data to include fish with a scalelength between 2 and 4.
 ```{r}
-
+filter(fish,between(scalelength,2,4))
+```
+```{r}
+filter(fish,lakeid%in%c("WS","AR"))
 ```
 
 ## Using `filter()` on multiple conditions
@@ -115,36 +118,47 @@ filter(fish, length > 400, (scalelength > 11 | radii_length_mm > 8))
 ## Practice  
 1. Have a look at the mammals data using the summary functions of your choosing.    
 ```{r}
-
+glimpse(mammals)
+view(mammals)
 ```
 
 2. What are the names of the variables in the mammals data?  
 ```{r}
-
+names(mammals)
 ```
 
 3.  From the `mammals` data, filter all members of the family Bovidae with a mass greater than 450000.
 ```{r}
-
+filter(mammals,family=="Bovidae"&mass>450000)
 ```
 
 4. Let's say we are only interested in family, genus, species, mass, and gestation. Relimit the mammals data frame to these variables.  
 ```{r}
-
+mammals_narrow<-select(mammals,"family","mass","genus","species","gestation")
+mammals_narrow
 ```
 
 5. Use the output from #4 to focus on the family Bovidae with a mass greater than 450000.
 ```{r}
-
+bovidae<-filter(mammals_narrow,family=="Bovidae",mass>450000)
+bovidae
 ```
 
 6. From the `mammals` data, build a data frame that compares `mass`, `gestation`, and `newborn` among the primate genera `Lophocebus`, `Erythrocebus`, and `Macaca`. Among these genera, which species has the smallest `newborn` mass?
 ```{r}
-
+primates1<-filter(mammals,genus=="Lophocebus"|genus=="Erythrocebus"|genus=="Macaca")
+primates1
 ```
 
 ```{r}
-
+primates2<-select(primates1,"mass","gestation","newborn")
+primates2
+```
+```{r}
+min(primates2$newborn)
+```
+```{r}
+filter(primates1,newborn==389.5)
 ```
 
 ## Wrap-up  
