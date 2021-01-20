@@ -2359,48 +2359,19 @@ good_guys</code></pre>
 ## 3 Ink   Male   blue      Muta~ No Hair       180 Marvel C~ &lt;NA&gt;       good     
 ## # ... with 1 more variable: weight &lt;dbl&gt;</code></pre>
 <p>#I just thought people that could control disease would be pretty helpful rigt now, I dont really have a favorite super hero otherwise.</p>
-<pre class="r"><code>ink&lt;-superhero_powers%&gt;%
-  filter(hero_names==&quot;Ink&quot;)
-  ink</code></pre>
-<pre><code>## # A tibble: 1 x 168
-##   hero_names agility accelerated_hea~ lantern_power_r~ dimensional_awa~
-##   &lt;chr&gt;      &lt;lgl&gt;   &lt;lgl&gt;            &lt;lgl&gt;            &lt;lgl&gt;           
-## 1 Ink        FALSE   TRUE             FALSE            FALSE           
-## # ... with 163 more variables: cold_resistance &lt;lgl&gt;, durability &lt;lgl&gt;,
-## #   stealth &lt;lgl&gt;, energy_absorption &lt;lgl&gt;, flight &lt;lgl&gt;, danger_sense &lt;lgl&gt;,
-## #   underwater_breathing &lt;lgl&gt;, marksmanship &lt;lgl&gt;, weapons_master &lt;lgl&gt;,
-## #   power_augmentation &lt;lgl&gt;, animal_attributes &lt;lgl&gt;, longevity &lt;lgl&gt;,
-## #   intelligence &lt;lgl&gt;, super_strength &lt;lgl&gt;, cryokinesis &lt;lgl&gt;,
-## #   telepathy &lt;lgl&gt;, energy_armor &lt;lgl&gt;, energy_blasts &lt;lgl&gt;,
-## #   duplication &lt;lgl&gt;, size_changing &lt;lgl&gt;, density_control &lt;lgl&gt;,
-## #   stamina &lt;lgl&gt;, astral_travel &lt;lgl&gt;, audio_control &lt;lgl&gt;, dexterity &lt;lgl&gt;,
-## #   omnitrix &lt;lgl&gt;, super_speed &lt;lgl&gt;, possession &lt;lgl&gt;,
-## #   animal_oriented_powers &lt;lgl&gt;, weapon_based_powers &lt;lgl&gt;,
-## #   electrokinesis &lt;lgl&gt;, darkforce_manipulation &lt;lgl&gt;, death_touch &lt;lgl&gt;,
-## #   teleportation &lt;lgl&gt;, enhanced_senses &lt;lgl&gt;, telekinesis &lt;lgl&gt;,
-## #   energy_beams &lt;lgl&gt;, magic &lt;lgl&gt;, hyperkinesis &lt;lgl&gt;, jump &lt;lgl&gt;,
-## #   clairvoyance &lt;lgl&gt;, dimensional_travel &lt;lgl&gt;, power_sense &lt;lgl&gt;,
-## #   shapeshifting &lt;lgl&gt;, peak_human_condition &lt;lgl&gt;, immortality &lt;lgl&gt;,
-## #   camouflage &lt;lgl&gt;, element_control &lt;lgl&gt;, phasing &lt;lgl&gt;,
-## #   astral_projection &lt;lgl&gt;, electrical_transport &lt;lgl&gt;, fire_control &lt;lgl&gt;,
-## #   projection &lt;lgl&gt;, summoning &lt;lgl&gt;, enhanced_memory &lt;lgl&gt;, reflexes &lt;lgl&gt;,
-## #   invulnerability &lt;lgl&gt;, energy_constructs &lt;lgl&gt;, force_fields &lt;lgl&gt;,
-## #   self_sustenance &lt;lgl&gt;, anti_gravity &lt;lgl&gt;, empathy &lt;lgl&gt;,
-## #   power_nullifier &lt;lgl&gt;, radiation_control &lt;lgl&gt;, psionic_powers &lt;lgl&gt;,
-## #   elasticity &lt;lgl&gt;, substance_secretion &lt;lgl&gt;,
-## #   elemental_transmogrification &lt;lgl&gt;, technopath_cyberpath &lt;lgl&gt;,
-## #   photographic_reflexes &lt;lgl&gt;, seismic_power &lt;lgl&gt;, animation &lt;lgl&gt;,
-## #   precognition &lt;lgl&gt;, mind_control &lt;lgl&gt;, fire_resistance &lt;lgl&gt;,
-## #   power_absorption &lt;lgl&gt;, enhanced_hearing &lt;lgl&gt;, nova_force &lt;lgl&gt;,
-## #   insanity &lt;lgl&gt;, hypnokinesis &lt;lgl&gt;, animal_control &lt;lgl&gt;,
-## #   natural_armor &lt;lgl&gt;, intangibility &lt;lgl&gt;, enhanced_sight &lt;lgl&gt;,
-## #   molecular_manipulation &lt;lgl&gt;, heat_generation &lt;lgl&gt;, adaptation &lt;lgl&gt;,
-## #   gliding &lt;lgl&gt;, power_suit &lt;lgl&gt;, mind_blast &lt;lgl&gt;,
-## #   probability_manipulation &lt;lgl&gt;, gravity_control &lt;lgl&gt;, regeneration &lt;lgl&gt;,
-## #   light_control &lt;lgl&gt;, echolocation &lt;lgl&gt;, levitation &lt;lgl&gt;,
-## #   toxin_and_disease_control &lt;lgl&gt;, banish &lt;lgl&gt;, energy_manipulation &lt;lgl&gt;,
-## #   heat_resistance &lt;lgl&gt;, ...</code></pre>
-<pre class="r"><code>  view(ink)</code></pre>
+<pre class="r"><code>superhero_powers%&gt;%
+  filter(hero_names==&quot;Ink&quot;)%&gt;%
+  select_if(all_vars(.==&quot;TRUE&quot;))</code></pre>
+<pre><code>## Warning: The `.predicate` argument of `select_if()` can&#39;t contain quosures. as of dplyr 0.8.3.
+## Please use a one-sided formula, a function, or a function name.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.</code></pre>
+<pre><code>## # A tibble: 1 x 7
+##   accelerated_hea~ flight super_strength telepathy toxin_and_disea~
+##   &lt;lgl&gt;            &lt;lgl&gt;  &lt;lgl&gt;          &lt;lgl&gt;     &lt;lgl&gt;           
+## 1 TRUE             TRUE   TRUE           TRUE      TRUE            
+## # ... with 2 more variables: molecular_combustion &lt;lgl&gt;, vitakinesis &lt;lgl&gt;</code></pre>
+<p>#Thanks agin for the code above!</p>
 </div>
 <div id="push-your-final-code-to-github" class="section level2">
 <h2>Push your final code to GitHub!</h2>

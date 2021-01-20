@@ -181,12 +181,11 @@ superhero_info%>%
 #I just thought people that could control disease would be pretty helpful rigt now, I dont really have a favorite super hero otherwise.
 
 ```{r}
-ink<-superhero_powers%>%
-  filter(hero_names=="Ink")
-  ink
-  view(ink)
+superhero_powers%>%
+  filter(hero_names=="Ink")%>%
+  select_if(all_vars(.=="TRUE"))
 ```
-
+#Thanks agin for the code above!
 
 ## Push your final code to GitHub!
 Please be sure that you check the `keep md` file in the knit preferences.  
