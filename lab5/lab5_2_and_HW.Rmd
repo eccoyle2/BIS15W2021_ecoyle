@@ -116,10 +116,10 @@ tabyl(good_guys,hair_color)
 tabyl(bad_guys,hair_color)
 ```
 
-10. Let's explore who the really "big" superheros are. In the `superhero_info` data, which have a height over 200 or weight over 300?
+10. Let's explore who the really "big" superheros are. In the `superhero_info` data, which have a height over 300 or weight over 450?
 ```{r}
 superhero_info%>%
-  filter(height>200|weight>300)
+  filter(height>300|weight>450)
 ```
 
 11. Just to be clear on the `|` operator,  have a look at the superheros over 300 in height...
@@ -133,7 +133,7 @@ superhero_info%>%
 superhero_info%>%
   filter(weight>450)
 ```
-#
+#some of the superheros that have a height over 300 also have a weight over 450 and are not double counted in number 10
 ## Height to Weight Ratio
 13. It's easy to be strong when you are heavy and tall, but who is heavy and short? Which superheros have the highest height to weight ratio?
 ```{r}
