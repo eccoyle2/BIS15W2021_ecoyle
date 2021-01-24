@@ -188,6 +188,14 @@ penguins%>%
   group_by(species)%>%
   summarise(across(contains("mm"),sd,na.rm=T))
 ```
+```{r}
+install.packages("dataMaid")
+install.packages("Rtools")
+```
+```{r}
+library(dataMaid)
+makeDataReport(msleep24)
+```
 
 
 ## Wrap-up  

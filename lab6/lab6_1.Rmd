@@ -32,7 +32,7 @@ library("janitor")
 
 ## Install `skimr`
 ```{r}
-#install.packages("skimr")
+install.packages("skimr")
 library("skimr")
 ```
 
@@ -45,18 +45,24 @@ names(msleep)
 
 We will also use the awesome [palmerpenguins](https://allisonhorst.github.io/palmerpenguins/articles/intro.html) data in the second part of lab so let's install it now.
 ```{r}
-#remotes::install_github("allisonhorst/palmerpenguins")
+install.packages("remotes")
+remotes::install_github("allisonhorst/palmerpenguins")
 ```
 
 ## dplyr Practice
 1. Let's do a bit more practice to make sure that we understand `select()`, `filter()`, and `mutate()`. Start by building a new data frame `msleep24` from the `msleep` data that: contains the `name` and `vore` variables along with a new column called `sleep_total_24` which is the amount of time a species sleeps expressed as a proportion of a 24-hour day. Remove any rows with NA's and restrict the `sleep_total_24` values to less than 0.3. Arrange the output in descending order.  
 ```{r}
-
+msleep24<-mutate(msleep,sleep_total_24=sleep_total/24)%>%
+  select("name","vore","sleep_total_24")%>%
+  filter_all(any_vars(.!="NA"))%>%
+  filter(sleep_total_24<.3)%>%
+  arrange(desc(sleep_total_24))
+msleep24
 ```
 
 Did `dplyr` do what we expected? How do we check our output? Remember, just because your code runs it doesn't mean that it did what you intended.
 ```{r}
-#summary(msleep24)
+summary(msleep24)
 ```
 
 Try out the new function `skim()` as part of the `skimr` package.
@@ -76,24 +82,32 @@ summary(msleep24)
 ```{r}
 skim(msleep)
 ```
+```{r}
+hist(msleep$sleep_total)
+```
 
 Don't forget we can also use `tabyl()` across one or many variables.
 ```{r}
 msleep%>%
-  tabyl(vore,order)
+  tabyl(vore,order)%>%
+  adorn_pct_formatting(digits = 1)
 ```
 
 ## Practice
 1. Which taxonomic orders have species that belong to more than one class of `vore`?
 ```{r}
 msleep%>%
-  tabyl(vore,order)
+  filter(!is.na(vore))%>%
+  tabyl(order,vore)
 ```
 #Artiodactyla,cingulata,didelphimorphia,Hyracoidea, erinaceomorphia,primates,rodentia,sorcomporpha
 ## `summarize()`
 `summarize()` will produce summary statistics for a given variable in a data frame. For example, if you are asked to calculate the mean of `sleep_total` for large and small mammals you could do this using a combination of commands, but it isn't very efficient or clean. We can do better!  
 ```{r}
 head(msleep)
+```
+```{r}
+?head
 ```
 
 For example, if we define "large" as having a `bodywt` greater than 200 then we get the following:
