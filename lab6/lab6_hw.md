@@ -1,7 +1,7 @@
 ---
 title: "Lab 6 Homework"
 author: "Eric Coyle"
-date: "2021-01-22"
+date: "2021-01-26"
 output:
   html_document: 
     theme: spacelab
@@ -34,7 +34,7 @@ getwd
 ```
 ## function () 
 ## .Internal(getwd())
-## <bytecode: 0x00000000150934a8>
+## <bytecode: 0x00000000155e07c0>
 ## <environment: namespace:base>
 ```
 
@@ -396,10 +396,6 @@ fisheries_tidy%>%
 ```
 
 ```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```
 ## # A tibble: 187 x 2
 ##    country                 catch_total
 ##    <fct>                         <dbl>
@@ -426,10 +422,6 @@ fisheries_tidy%>%
   filter(!is.na(catch))%>%
   summarize(catch_total=sum(catch))%>%
   arrange(catch_total)
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -534,10 +526,6 @@ fisheries_tidy%>%
 ```
 
 ```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```
 ## # A tibble: 116 x 2
 ##    country                    catch_total
 ##    <fct>                            <dbl>
@@ -568,10 +556,6 @@ fisheries_tidy%>%
 ```
 
 ```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```
 ## # A tibble: 1,353 x 2
 ##    asfis_species_name    catch_total
 ##    <chr>                       <dbl>
@@ -597,10 +581,6 @@ fisheries_tidy%>%
   filter(!is.na(catch))%>%
   summarise(mean_catch=mean(catch))%>%
   arrange(mean_catch)
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
