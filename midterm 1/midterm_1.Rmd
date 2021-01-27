@@ -110,13 +110,22 @@ class(defaunation$LandUse)
 ```{r}
 names(defaunation)
 head(defaunation)
+tabyl(defaunation$HuntCat)
 ```
 ```{r}
 defaunation%>%
   select(HuntCat,Diversity_MammalSpecies,Diversity_BirdSpecies)%>%
-  filter(HuntCat=="Moderate"|HuntCat=="High")%>%
+  filter(HuntCat=="Moderate")%>%
   summarise(across(c(Diversity_MammalSpecies,Diversity_BirdSpecies),mean,na.rm=T))
 ```
+```{r}
+defaunation%>%
+  select(HuntCat,Diversity_MammalSpecies,Diversity_BirdSpecies)%>%
+  filter(HuntCat=="High")%>%
+  summarise(across(c(Diversity_MammalSpecies,Diversity_BirdSpecies),mean,na.rm=T))
+```
+
+
 ```{r}
 defaunation%>%
   select(HuntCat,Diversity_MammalSpecies,Diversity_BirdSpecies)%>%

@@ -307,9 +307,20 @@ head(defaunation)
 ```
 
 ```r
+tabyl(defaunation$HuntCat)
+```
+
+```
+##  defaunation$HuntCat n   percent
+##                 High 7 0.2916667
+##             Moderate 8 0.3333333
+##                 None 9 0.3750000
+```
+
+```r
 defaunation%>%
   select(HuntCat,Diversity_MammalSpecies,Diversity_BirdSpecies)%>%
-  filter(HuntCat=="Moderate"|HuntCat=="High")%>%
+  filter(HuntCat=="Moderate")%>%
   summarise(across(c(Diversity_MammalSpecies,Diversity_BirdSpecies),mean,na.rm=T))
 ```
 
@@ -317,8 +328,24 @@ defaunation%>%
 ## # A tibble: 1 x 2
 ##   Diversity_MammalSpecies Diversity_BirdSpecies
 ##                     <dbl>                 <dbl>
-## 1                    1.71                  1.64
+## 1                    1.68                  1.62
 ```
+
+```r
+defaunation%>%
+  select(HuntCat,Diversity_MammalSpecies,Diversity_BirdSpecies)%>%
+  filter(HuntCat=="High")%>%
+  summarise(across(c(Diversity_MammalSpecies,Diversity_BirdSpecies),mean,na.rm=T))
+```
+
+```
+## # A tibble: 1 x 2
+##   Diversity_MammalSpecies Diversity_BirdSpecies
+##                     <dbl>                 <dbl>
+## 1                    1.74                  1.66
+```
+
+
 
 ```r
 defaunation%>%
