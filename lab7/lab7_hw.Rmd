@@ -93,7 +93,8 @@ amniota%>%
 **5. Make any necessary replacements in the data such that all NA's appear as "NA".**   
 ```{r}
 amniota_tidy<-amniota%>%
-  na_if("-999")
+  na_if("-999")%>%
+  na_if("-30258.711")
 ```
 
 ```{r}
@@ -143,7 +144,7 @@ amphibio%>%
 
 **10. Now that we know how NA's are represented in the `amniota` data, how would you load the data such that the values which represent NA's are automatically converted?**
 ```{r}
-amniota_advance<-readr::read_csv(file="data/amniota.csv",na=c("-999"))
+amniota_advance<-readr::read_csv(file="data/amniota.csv",na=c("-999","-30258.711"))
 ```
 ```{r}
 amniota_advance%>%
@@ -154,6 +155,11 @@ amniota_tidy%>%
   naniar::miss_var_summary()
 ```
 #strange, why are percentages ansd numbers different between the two
+```{r}
+amniota%>%
+  select(female_maturity_d)%>%
+  arrange(female_maturity_d)
+```
 
 ## Push your final code to GitHub!
 Please be sure that you check the `keep md` file in the knit preferences.  

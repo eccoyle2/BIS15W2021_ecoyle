@@ -11,7 +11,7 @@
 
 <meta name="author" content="Eric Coyle" />
 
-<meta name="date" content="2021-01-28" />
+<meta name="date" content="2021-01-30" />
 
 <title>Lab 7 Homework</title>
 
@@ -399,7 +399,7 @@ summary {
 
 <h1 class="title toc-ignore">Lab 7 Homework</h1>
 <h4 class="author">Eric Coyle</h4>
-<h4 class="date">2021-01-28</h4>
+<h4 class="date">2021-01-30</h4>
 
 </div>
 
@@ -690,7 +690,8 @@ Oliveira BF, São-Pedro VA, Santos-Barrera G, Penone C, Costa GC (2017). “Amph
 ## 1          0</code></pre>
 <p><strong>5. Make any necessary replacements in the data such that all NA’s appear as “NA”.</strong></p>
 <pre class="r"><code>amniota_tidy&lt;-amniota%&gt;%
-  na_if(&quot;-999&quot;)</code></pre>
+  na_if(&quot;-999&quot;)%&gt;%
+  na_if(&quot;-30258.711&quot;)</code></pre>
 <pre class="r"><code>head(amniota_tidy)</code></pre>
 <pre><code>## # A tibble: 6 x 36
 ##   class order family genus species subspecies common_name female_maturity~
@@ -722,14 +723,14 @@ Oliveira BF, São-Pedro VA, Santos-Barrera G, Penone C, Costa GC (2017). “Amph
 ##                                                                             
 ##                                                                             
 ##                                                                             
-##    species            subspecies    common_name        female_maturity_d 
-##  Length:21322       Min.   : NA     Length:21322       Min.   :-30258.7  
-##  Class :character   1st Qu.: NA     Class :character   1st Qu.:   288.4  
-##  Mode  :character   Median : NA     Mode  :character   Median :   365.0  
-##                     Mean   :NaN                        Mean   :   691.2  
-##                     3rd Qu.: NA                        3rd Qu.:   819.3  
-##                     Max.   : NA                        Max.   :  9131.2  
-##                     NA&#39;s   :21322                      NA&#39;s   :17849     
+##    species            subspecies    common_name        female_maturity_d
+##  Length:21322       Min.   : NA     Length:21322       Min.   :  23.81  
+##  Class :character   1st Qu.: NA     Class :character   1st Qu.: 289.00  
+##  Mode  :character   Median : NA     Mode  :character   Median : 365.12  
+##                     Mean   :NaN                        Mean   : 726.85  
+##                     3rd Qu.: NA                        3rd Qu.: 819.34  
+##                     Max.   : NA                        Max.   :9131.25  
+##                     NA&#39;s   :21322                      NA&#39;s   :17853    
 ##  litter_or_clutch_size_n litters_or_clutches_per_y adult_body_mass_g  
 ##  Min.   :  0.900         Min.   : 0.120            Min.   :        0  
 ##  1st Qu.:  2.000         1st Qu.: 1.000            1st Qu.:       15  
@@ -919,7 +920,7 @@ Oliveira BF, São-Pedro VA, Santos-Barrera G, Penone C, Costa GC (2017). “Amph
 ## 4 ter        1104     16.3</code></pre>
 <p>#in this case I think since a species is either terrestrial, aquatic, arboreal, or burrowing (and not combinations of said life styles), that NA’s here do not mean a lack of data but rather that the species represented by the row does no follow that lifestyle. If you add up the percentages of the data that isnt NA in these four columns you get 100 percent, further supporting how each entry follows one of these life styles and not the other and that NA are used here to fill in for where it is known a species does match the criteria of that column (i.e. it is known that that species is not terrestrial, arboreal, aquatic, and/or fossorial)</p>
 <p><strong>10. Now that we know how NA’s are represented in the <code>amniota</code> data, how would you load the data such that the values which represent NA’s are automatically converted?</strong></p>
-<pre class="r"><code>amniota_advance&lt;-readr::read_csv(file=&quot;data/amniota.csv&quot;,na=c(&quot;-999&quot;))</code></pre>
+<pre class="r"><code>amniota_advance&lt;-readr::read_csv(file=&quot;data/amniota.csv&quot;,na=c(&quot;-999&quot;,&quot;-30258.711&quot;))</code></pre>
 <pre><code>## 
 ## -- Column specification --------------------------------------------------------
 ## cols(
@@ -942,15 +943,6 @@ Oliveira BF, São-Pedro VA, Santos-Barrera G, Penone C, Costa GC (2017). “Amph
 ##   no_sex_svl_cm = col_logical()
 ## )
 ## i Use `spec()` for the full column specifications.</code></pre>
-<pre><code>## Warning: 13577 parsing failures.
-##  row                      col           expected actual               file
-## 9803 birth_or_hatching_svl_cm 1/0/T/F/TRUE/FALSE    4.7 &#39;data/amniota.csv&#39;
-## 9804 birth_or_hatching_svl_cm 1/0/T/F/TRUE/FALSE    4.7 &#39;data/amniota.csv&#39;
-## 9805 birth_or_hatching_svl_cm 1/0/T/F/TRUE/FALSE    4.7 &#39;data/amniota.csv&#39;
-## 9806 birth_or_hatching_svl_cm 1/0/T/F/TRUE/FALSE    4.7 &#39;data/amniota.csv&#39;
-## 9807 birth_or_hatching_svl_cm 1/0/T/F/TRUE/FALSE    4.7 &#39;data/amniota.csv&#39;
-## .... ........................ .................. ...... ..................
-## See problems(...) for more details.</code></pre>
 <pre class="r"><code>amniota_advance%&gt;%
   naniar::miss_var_summary()</code></pre>
 <pre><code>## # A tibble: 36 x 3
@@ -984,6 +976,23 @@ Oliveira BF, São-Pedro VA, Santos-Barrera G, Penone C, Costa GC (2017). “Amph
 ## 10 female_svl_cm                   20242     94.9
 ## # ... with 26 more rows</code></pre>
 <p>#strange, why are percentages ansd numbers different between the two</p>
+<pre class="r"><code>amniota%&gt;%
+  select(female_maturity_d)%&gt;%
+  arrange(female_maturity_d)</code></pre>
+<pre><code>## # A tibble: 21,322 x 1
+##    female_maturity_d
+##                &lt;dbl&gt;
+##  1           -30259.
+##  2           -30259.
+##  3           -30259.
+##  4           -30259.
+##  5             -999 
+##  6             -999 
+##  7             -999 
+##  8             -999 
+##  9             -999 
+## 10             -999 
+## # ... with 21,312 more rows</code></pre>
 </div>
 <div id="push-your-final-code-to-github" class="section level2">
 <h2>Push your final code to GitHub!</h2>

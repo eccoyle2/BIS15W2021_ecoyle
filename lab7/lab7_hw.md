@@ -1,7 +1,7 @@
 ---
 title: "Lab 7 Homework"
 author: "Eric Coyle"
-date: "2021-01-28"
+date: "2021-01-30"
 output:
   html_document: 
     theme: spacelab
@@ -396,7 +396,8 @@ amniota%>%
 
 ```r
 amniota_tidy<-amniota%>%
-  na_if("-999")
+  na_if("-999")%>%
+  na_if("-30258.711")
 ```
 
 
@@ -441,14 +442,14 @@ summary(amniota_tidy)
 ##                                                                             
 ##                                                                             
 ##                                                                             
-##    species            subspecies    common_name        female_maturity_d 
-##  Length:21322       Min.   : NA     Length:21322       Min.   :-30258.7  
-##  Class :character   1st Qu.: NA     Class :character   1st Qu.:   288.4  
-##  Mode  :character   Median : NA     Mode  :character   Median :   365.0  
-##                     Mean   :NaN                        Mean   :   691.2  
-##                     3rd Qu.: NA                        3rd Qu.:   819.3  
-##                     Max.   : NA                        Max.   :  9131.2  
-##                     NA's   :21322                      NA's   :17849     
+##    species            subspecies    common_name        female_maturity_d
+##  Length:21322       Min.   : NA     Length:21322       Min.   :  23.81  
+##  Class :character   1st Qu.: NA     Class :character   1st Qu.: 289.00  
+##  Mode  :character   Median : NA     Mode  :character   Median : 365.12  
+##                     Mean   :NaN                        Mean   : 726.85  
+##                     3rd Qu.: NA                        3rd Qu.: 819.34  
+##                     Max.   : NA                        Max.   :9131.25  
+##                     NA's   :21322                      NA's   :17853    
 ##  litter_or_clutch_size_n litters_or_clutches_per_y adult_body_mass_g  
 ##  Min.   :  0.900         Min.   : 0.120            Min.   :        0  
 ##  1st Qu.:  2.000         1st Qu.: 1.000            1st Qu.:       15  
@@ -684,7 +685,7 @@ amphibio%>%
 **10. Now that we know how NA's are represented in the `amniota` data, how would you load the data such that the values which represent NA's are automatically converted?**
 
 ```r
-amniota_advance<-readr::read_csv(file="data/amniota.csv",na=c("-999"))
+amniota_advance<-readr::read_csv(file="data/amniota.csv",na=c("-999","-30258.711"))
 ```
 
 ```
@@ -710,18 +711,6 @@ amniota_advance<-readr::read_csv(file="data/amniota.csv",na=c("-999"))
 ##   no_sex_svl_cm = col_logical()
 ## )
 ## i Use `spec()` for the full column specifications.
-```
-
-```
-## Warning: 13577 parsing failures.
-##  row                      col           expected actual               file
-## 9803 birth_or_hatching_svl_cm 1/0/T/F/TRUE/FALSE    4.7 'data/amniota.csv'
-## 9804 birth_or_hatching_svl_cm 1/0/T/F/TRUE/FALSE    4.7 'data/amniota.csv'
-## 9805 birth_or_hatching_svl_cm 1/0/T/F/TRUE/FALSE    4.7 'data/amniota.csv'
-## 9806 birth_or_hatching_svl_cm 1/0/T/F/TRUE/FALSE    4.7 'data/amniota.csv'
-## 9807 birth_or_hatching_svl_cm 1/0/T/F/TRUE/FALSE    4.7 'data/amniota.csv'
-## .... ........................ .................. ...... ..................
-## See problems(...) for more details.
 ```
 
 ```r
@@ -768,6 +757,29 @@ amniota_tidy%>%
 ## # ... with 26 more rows
 ```
 #strange, why are percentages ansd numbers different between the two
+
+```r
+amniota%>%
+  select(female_maturity_d)%>%
+  arrange(female_maturity_d)
+```
+
+```
+## # A tibble: 21,322 x 1
+##    female_maturity_d
+##                <dbl>
+##  1           -30259.
+##  2           -30259.
+##  3           -30259.
+##  4           -30259.
+##  5             -999 
+##  6             -999 
+##  7             -999 
+##  8             -999 
+##  9             -999 
+## 10             -999 
+## # ... with 21,312 more rows
+```
 
 ## Push your final code to GitHub!
 Please be sure that you check the `keep md` file in the knit preferences.  
