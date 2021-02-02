@@ -78,6 +78,10 @@ elephants%>%
   summarise(across(c(age,height),mean,na.rm=T))
 ```
 
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
 
 **8. (2 points) How does the average height of elephants compare by sex for individuals over 25 years old. Include the min and max height as well as the number of individuals in the sample as part of your analysis.**
 ```{r}
@@ -88,6 +92,7 @@ elephants%>%
          max_height=max(height),
          total=n())
 ```
+</div>
 
 For the next series of questions, we will use data from a study on vertebrate community composition and impacts from defaunation in [Gabon, Africa](https://en.wikipedia.org/wiki/Gabon). One thing to notice is that the data include 24 separate transects. Each transect represents a path through different forest management areas.  
 

@@ -1,7 +1,7 @@
 ---
 title: "Midterm 1"
 author: "Eric Coyle"
-date: "2021-01-26"
+date: "2021-02-02"
 output:
   html_document: 
     theme: spacelab
@@ -117,7 +117,7 @@ elephants%>%
 ```
 ## # A tibble: 2 x 2
 ##   sex       n
-##   <fct> <int>
+## * <fct> <int>
 ## 1 F       150
 ## 2 M       138
 ```
@@ -143,17 +143,17 @@ elephants%>%
 ```
 
 ```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```
 ## # A tibble: 2 x 3
 ##   sex     age height
-##   <fct> <dbl>  <dbl>
+## * <fct> <dbl>  <dbl>
 ## 1 F     12.8    190.
 ## 2 M      8.95   185.
 ```
 
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
 
 **8. (2 points) How does the average height of elephants compare by sex for individuals over 25 years old. Include the min and max height as well as the number of individuals in the sample as part of your analysis.**
 
@@ -167,16 +167,13 @@ elephants%>%
 ```
 
 ```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```
 ## # A tibble: 2 x 5
 ##   sex   mean_height min_height max_height total
-##   <fct>       <dbl>      <dbl>      <dbl> <int>
+## * <fct>       <dbl>      <dbl>      <dbl> <int>
 ## 1 F            190.       75.6       278.   150
 ## 2 M            185.       75.5       304.   138
 ```
+</div>
 
 For the next series of questions, we will use data from a study on vertebrate community composition and impacts from defaunation in [Gabon, Africa](https://en.wikipedia.org/wiki/Gabon). One thing to notice is that the data include 24 separate transects. Each transect represents a path through different forest management areas.  
 
@@ -431,10 +428,6 @@ defaunation%>%
   group_by(NumHouseholds)%>%
   summarise(across(contains("Veg"),mean,na.rm=T))%>%
   arrange(NumHouseholds)
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
