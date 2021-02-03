@@ -28,9 +28,15 @@ library(dbplyr)
 ```
 
 ## Questions
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
 **1. (2 points) Briefly explain how R, RStudio, and GitHub work together to make work flows in data science transparent and repeatable. What is the advantage of using RMarkdown in this context?**  
 
 # R is an scripting/programming language through which users interface via R studio (a graphical user interface program) to mske using R easier. R performs a variety of analystical, statistical, and organizing functions that make it particularly useful for sharing and presenting data, which is further facilitated by Github, a website where R users can store and shore dat sets, code, and calculations for other users/programmers to build off of and asses. Github also allows for code/data to be repeated by others to assess accuracy or allow for wider collaborations. 
+</div>
 
 **2. (2 points) What are the three types of `data structures` that we have discussed? Why are we using data frames for BIS 15L?**
 
