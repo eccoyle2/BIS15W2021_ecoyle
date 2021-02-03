@@ -1,6 +1,6 @@
 ---
 title: "Lab 8 Homework"
-author: "Please Add Your Name Here"
+author: "Eric Coyle"
 date: "2021-02-02"
 output:
   html_document: 
@@ -337,9 +337,7 @@ arrange(2018)
 
 #South Maroubra Rockpool
 
-```r
-getwd()
-```
+
 
 ```
 ## [1] "C:/Users/ericc/Desktop/BIS15L-W21-DataScienceBiologists/lab8"
