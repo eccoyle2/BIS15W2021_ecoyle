@@ -1,7 +1,7 @@
 ---
 title: "Lab 7 Homework"
 author: "Eric Coyle"
-date: "2021-01-30"
+date: "2021-02-02"
 output:
   html_document: 
     theme: spacelab
@@ -711,6 +711,18 @@ amniota_advance<-readr::read_csv(file="data/amniota.csv",na=c("-999","-30258.711
 ##   no_sex_svl_cm = col_logical()
 ## )
 ## i Use `spec()` for the full column specifications.
+```
+
+```
+## Warning: 13577 parsing failures.
+##  row                      col           expected actual               file
+## 9803 birth_or_hatching_svl_cm 1/0/T/F/TRUE/FALSE    4.7 'data/amniota.csv'
+## 9804 birth_or_hatching_svl_cm 1/0/T/F/TRUE/FALSE    4.7 'data/amniota.csv'
+## 9805 birth_or_hatching_svl_cm 1/0/T/F/TRUE/FALSE    4.7 'data/amniota.csv'
+## 9806 birth_or_hatching_svl_cm 1/0/T/F/TRUE/FALSE    4.7 'data/amniota.csv'
+## 9807 birth_or_hatching_svl_cm 1/0/T/F/TRUE/FALSE    4.7 'data/amniota.csv'
+## .... ........................ .................. ...... ..................
+## See problems(...) for more details.
 ```
 
 ```r
