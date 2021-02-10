@@ -1,7 +1,7 @@
 ---
 title: "Lab 10 Homework"
 author: "Eric Coyle"
-date: "2021-02-09"
+date: "2021-02-10"
 output:
   html_document: 
     theme: spacelab
@@ -248,21 +248,39 @@ deserts%>%
 
 ```r
 deserts%>%
-  ggplot(aes(x=species,y=n_distinct(weight)))+
-  geom_col(size=1)+
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))+
-  labs(title = "Weight Measurements per Species",x="Species",y="Number of Weight Measurements")
+  group_by(species)%>%
+  filter(weight!="NA")%>%
+  count(n_distinct(record_id))
 ```
 
-![](lab10_hw_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+```
+## # A tibble: 22 x 3
+## # Groups:   species [22]
+##    species     `n_distinct(record_id)`     n
+##    <chr>                         <int> <int>
+##  1 albigula                      32283  1152
+##  2 baileyi                       32283  2810
+##  3 eremicus                      32283  1260
+##  4 flavus                        32283  1548
+##  5 fulvescens                    32283    75
+##  6 fulviventer                   32283    41
+##  7 hispidus                      32283   172
+##  8 intermedius                   32283     8
+##  9 leucogaster                   32283   970
+## 10 leucopus                      32283    36
+## # ... with 12 more rows
+```
+
 
 ```r
 deserts%>%
-  summarise(species=species,number_weight_measurements=n_distinct(weight))%>%
-  ggplot(aes(x=species,y=number_weight_measurements))+
-  geom_col()+
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))+
-  labs(title = "Weight Measurements per Species",x="Species",y="Number of Weight Measurements")
+group_by(species)%>%
+filter(weight!="NA")%>%
+count(species)%>%
+ggplot(aes(x=species,y=n))+
+geom_point(size=3)+
+theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+labs(title = "Weight Measurements per Species",x="Species",y="Number of Weight Measurements")
 ```
 
 ![](lab10_hw_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
