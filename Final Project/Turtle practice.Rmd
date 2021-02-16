@@ -2,7 +2,9 @@
 title: "Test for project"
 author: "Eric Coyle"
 date: "2/11/2021"
-output: html_document
+output: 
+  html_document: 
+    keep_md: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -14,12 +16,83 @@ library(here)
 library(tidyverse)
 library(naniar)
 library(janitor)
-library(gtools)
+library(shiny)
 library(paletteer)
 ```
 
 ```{r}
 turtles<-read.csv(here("Final Project","Turtle_data.csv"))
-turtles
+#turtles
+#view(turtles)
+```
+
+
+```{r}
+turtles%>%
+  naniar::miss_var_summary()
+```
+```{r}
+turtles%>%
+  tabyl(Species)
+```
+```{r}
+turtles%>%
+  group_by(Species)%>%
+  summarise(across(contains("CL"),mean,na.rm=T))
+```
+```{r}
+turtles%>%
+  filter(Species=="")
+```
+
+```{r}
+turtles%>%
+  group_by(year)%>%
+  count(Dead_Alive)
+```
+```{r}
+turtles%>%
+  group_by(year)%>%
+  ggplot(aes(x=year,fill=Dead_Alive))+
+  geom_bar(position = "dodge")
+```
+```{r}
+turtles%>%
+  filter(Dead_Alive=="")
+```
+
+```{r}
+turtles_tidy<-turtles%>%
+  mutate_all(tolower)
+```
+
+```{r}
+turtles_tidy%>%
+  group_by(year)%>%
+  filter(Dead_Alive!="")%>%
+  ggplot(aes(x=year,fill=Dead_Alive))+
+  geom_bar(position = "dodge")+
+  labs(title = "Number of Dead and Live Captures per Year",x="year",y="Number of Dead or Live Captures")+
+  theme(axis.text.x = element_text(angle = 60,hjust = 1))
+```
+```{r}
+turtles%>%
+  group_by(Species)%>%
+  summarise(mean_SCL_tip=mean(SCL_tip,na.rm=T))
+```
+
+
+```{r}
+turtles%>%
+  filter(Gear!="")%>%
+  tabyl(Gear,Species)
+```
+```{r}
+turtles%>%
+  filter(Gear!=""&Species!="")%>%
+  ggplot(aes(x=Gear,fill=Species))+
+  geom_bar(position = "dodge")+
+  labs(title = "Gear used for Different Spcies",x="Gear",y="Number Captured with Given Method")+
+  theme(axis.text.x = element_text(angle = 60,hjust = 1))
 ```
 
