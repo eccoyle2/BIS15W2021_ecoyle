@@ -101,6 +101,19 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 <div class = "blue">
 
 6. Add another layer to your answer from #4 using `geom_point` to get an idea of how many measurements were taken for each species.
+
+```{r}
+deserts %>% 
+  filter(weight!="NA") %>% 
+  ggplot(aes(x=species_id, y=weight)) +
+  geom_boxplot()+
+  geom_point(alpha=0.3, color="green", position = "jitter") +
+  coord_flip()+
+  labs(title = "Distribution of weight for each species",
+       x = "Species ID",
+       y = "Weight")
+```
+
 ```{r}
 deserts%>%
   group_by(species)%>%

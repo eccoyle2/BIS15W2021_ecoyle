@@ -250,6 +250,22 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 
 6. Add another layer to your answer from #4 using `geom_point` to get an idea of how many measurements were taken for each species.
 
+
+```r
+deserts %>% 
+  filter(weight!="NA") %>% 
+  ggplot(aes(x=species_id, y=weight)) +
+  geom_boxplot()+
+  geom_point(alpha=0.3, color="green", position = "jitter") +
+  coord_flip()+
+  labs(title = "Distribution of weight for each species",
+       x = "Species ID",
+       y = "Weight")
+```
+
+![](lab10_hw_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+
+
 ```r
 deserts%>%
   group_by(species)%>%
@@ -287,7 +303,7 @@ theme(axis.text.x = element_text(angle = 60, hjust = 1))+
 labs(title = "Weight Measurements per Species",x="Species",y="Number of Weight Measurements")
 ```
 
-![](lab10_hw_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+![](lab10_hw_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
 </div>
 
 7. [Dipodomys merriami](https://en.wikipedia.org/wiki/Merriam's_kangaroo_rat) is the most frequently sampled animal in the study. How have the number of observations of this species changed over the years included in the study?
@@ -337,7 +353,7 @@ deserts%>%
   labs(title = "Dipodomys merriami Observed Over Time",x="Year",y="Number of Observations")
 ```
 
-![](lab10_hw_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
+![](lab10_hw_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
 
 8. What is the relationship between `weight` and `hindfoot` length? Consider whether or not over plotting is an issue.
 
@@ -347,7 +363,7 @@ deserts%>%
   geom_point(na.rm=T)
 ```
 
-![](lab10_hw_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+![](lab10_hw_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
 
 ```r
 deserts%>%
@@ -357,7 +373,7 @@ deserts%>%
   labs(title = "Relationship between Weight and Hindfoot Length",x="Weight",y="Hind foot Length")
 ```
 
-![](lab10_hw_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+![](lab10_hw_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
 #overplotting is definitely an issue in my opinion
 
 9. Which two species have, on average, the highest weight? Once you have identified them, make a new column that is a ratio of `weight` to `hindfoot_length`. Make a plot that shows the range of this new ratio and fill by sex.
@@ -423,7 +439,7 @@ deserts2%>%
 ## Warning: Removed 684 rows containing non-finite values (stat_boxplot).
 ```
 
-![](lab10_hw_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+![](lab10_hw_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
 
 ```r
 names(deserts)
@@ -455,7 +471,7 @@ deserts%>%
 ## `summarise()` has grouped output by 'plot_type'. You can override using the `.groups` argument.
 ```
 
-![](lab10_hw_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+![](lab10_hw_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
 
 ## Push your final code to GitHub!
 Please be sure that you check the `keep md` file in the knit preferences. 
