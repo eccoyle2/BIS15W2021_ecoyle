@@ -102,4 +102,10 @@ turtles_tidy2<-turtles%>%
 turtles_tidy2%>%
   tabyl(Sex_laparoscopy)
 ```
+```{r}
+turtles3<-turtles_tidy2%>%
+  mutate(dead_alive_new=if_else(Dead_Alive=="alive","Alive",Dead_Alive))
+turtles3%>%
+  tabyl(dead_alive_new)
+```
 

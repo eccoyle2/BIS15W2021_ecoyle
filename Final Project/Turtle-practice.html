@@ -383,6 +383,14 @@ library(paletteer)</code></pre>
 ##  Sample was not collected 11797 0.8780796427  0.9514476974
 ##               Unknown sex     4 0.0002977298  0.0003226067
 ##                      &lt;NA&gt;  1036 0.0771120208            NA</code></pre>
+<pre class="r"><code>turtles3&lt;-turtles_tidy2%&gt;%
+  mutate(dead_alive_new=if_else(Dead_Alive==&quot;alive&quot;,&quot;Alive&quot;,Dead_Alive))
+turtles3%&gt;%
+  tabyl(dead_alive_new)</code></pre>
+<pre><code>##  dead_alive_new     n      percent valid_percent
+##           Alive 12598 9.377000e-01    0.93776984
+##            Dead   836 6.222553e-02    0.06223016
+##            &lt;NA&gt;     1 7.443245e-05            NA</code></pre>
 
 
 

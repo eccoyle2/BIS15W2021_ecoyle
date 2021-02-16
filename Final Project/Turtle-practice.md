@@ -306,3 +306,17 @@ turtles_tidy2%>%
 ##                      <NA>  1036 0.0771120208            NA
 ```
 
+```r
+turtles3<-turtles_tidy2%>%
+  mutate(dead_alive_new=if_else(Dead_Alive=="alive","Alive",Dead_Alive))
+turtles3%>%
+  tabyl(dead_alive_new)
+```
+
+```
+##  dead_alive_new     n      percent valid_percent
+##           Alive 12598 9.377000e-01    0.93776984
+##            Dead   836 6.222553e-02    0.06223016
+##            <NA>     1 7.443245e-05            NA
+```
+
