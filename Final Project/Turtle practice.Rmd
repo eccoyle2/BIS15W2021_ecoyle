@@ -40,10 +40,7 @@ turtles%>%
   group_by(Species)%>%
   summarise(across(contains("CL"),mean,na.rm=T))
 ```
-```{r}
-turtles%>%
-  filter(Species=="")
-```
+
 
 ```{r}
 turtles%>%
@@ -94,5 +91,15 @@ turtles%>%
   geom_bar(position = "dodge")+
   labs(title = "Gear used for Different Spcies",x="Gear",y="Number Captured with Given Method")+
   theme(axis.text.x = element_text(angle = 60,hjust = 1))
+```
+```{r}
+turtles_tidy2<-turtles%>%
+  na_if("")%>%
+  na_if("0")%>%
+  na_if("0.0")
+```
+```{r}
+turtles_tidy2%>%
+  tabyl(Sex_laparoscopy)
 ```
 

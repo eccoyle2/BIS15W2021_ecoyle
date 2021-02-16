@@ -127,35 +127,6 @@ turtles%>%
 ## # ... with 1 more variable: Cloacal <dbl>
 ```
 
-```r
-turtles%>%
-  filter(Species=="")
-```
-
-```
-##   year Turtle_ID                  ResearchType DateCapture Species Master_tag
-## 1 2007      dead Index of Abundance  pound net   22-Nov-07                   
-##   Dead_Alive RecordType Inconel_Tag  BodyArea PIT_tag BodyArea_PIT DateRelease
-## 1               Release        none Left Rear    None   Left Front            
-##        Gear SCL_notch SCL_tip  SCW CCL_notch CCL_tip CCW Circumference Girth
-## 1 Pound net      28.6    29.2 23.3      30.3      31  26             0    10
-##   Depth_.mid Tail Weight Cap_Region Rel_Region Cap_Latitude Cap_Longitude
-## 1         NA   NA      0    Inshore                   35.21      -75.8086
-##   Rel_Latitude Rel_Longitude HepTube_Before HepTube_After TestLevel_Before
-## 1           NA             0                                             0
-##   TestLevel_After Lysis_tube_ID Skin_Biopsy_ID Haplotype Oxtetracyclene
-## 1               0            NA           3608                    FALSE
-##   Health_Blood Satellite_tag Holding_Facility Sex_laparoscopy Sex_Necropsy
-## 1        FALSE         FALSE                                              
-##   Sex_Testosterone_Level_1 Sex_Testosterone_Level_2 State Hematology OC_OB
-## 1                                                      NC      FALSE FALSE
-##      FH Metals SIA_skin SIA_bone SIA_blood SIA_barnacles SIA_scutes
-## 1 FALSE  FALSE    FALSE    FALSE     FALSE         FALSE      FALSE
-##   SIA_analyzed Photos Scute Cloacal Lesion   Fat Fecal Pathogens PCV TS
-## 1        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE   0  0
-##   Entangled Imaging OrganBiopsy LivingTag RadioTag AcousticTag
-## 1     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
-```
 
 
 ```r
@@ -189,7 +160,7 @@ turtles%>%
   geom_bar(position = "dodge")
 ```
 
-![](Turtle-practice_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](Turtle-practice_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 ```r
 turtles%>%
@@ -238,7 +209,7 @@ turtles_tidy%>%
   theme(axis.text.x = element_text(angle = 60,hjust = 1))
 ```
 
-![](Turtle-practice_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![](Turtle-practice_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
 ```r
 turtles%>%
@@ -311,5 +282,27 @@ turtles%>%
   theme(axis.text.x = element_text(angle = 60,hjust = 1))
 ```
 
-![](Turtle-practice_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+![](Turtle-practice_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+
+```r
+turtles_tidy2<-turtles%>%
+  na_if("")%>%
+  na_if("0")%>%
+  na_if("0.0")
+```
+
+```r
+turtles_tidy2%>%
+  tabyl(Sex_laparoscopy)
+```
+
+```
+##           Sex_laparoscopy     n      percent valid_percent
+##                    Female   434 0.0323036844  0.0350028228
+##                      Male   152 0.0113137328  0.0122590531
+##      Sample was collected    12 0.0008931894  0.0009678200
+##  Sample was not collected 11797 0.8780796427  0.9514476974
+##               Unknown sex     4 0.0002977298  0.0003226067
+##                      <NA>  1036 0.0771120208            NA
+```
 
