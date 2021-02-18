@@ -26,6 +26,11 @@ turtles<-read.csv(here("Final Project","Turtle_data.csv"))
 #view(turtles)
 ```
 
+```{r}
+glimpse(turtles)
+```
+
+
 
 ```{r}
 turtles%>%
