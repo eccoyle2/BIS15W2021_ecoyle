@@ -113,4 +113,114 @@ turtles3<-turtles_tidy2%>%
 turtles3%>%
   tabyl(dead_alive_new)
 ```
+```{r}
+library(ggmap)
+library(tidyverse)
+library(rgeos)
+library(rgdal)
+library(devtools)
+```
+
+```{r}
+names(turtles3)
+head(turtles3)
+```
+```{r}
+turtles3%>%
+  tabyl(ResearchType)
+```
+
+```{r}
+turtles3%>%
+  tabyl(BodyArea)
+```
+
+
+```{r}
+turtles3%>%
+  select(Cap_Latitude,Cap_Longitude)%>%
+  summary()
+```
+
+```{r}
+cap_lat <- c(33.49, 38.41)
+cap_long <- c(-79.08, -75.47)
+bbox <- make_bbox(cap_long, cap_lat, f = 0.1)
+```
+
+```{r}
+cap_map_base <- get_map(bbox, maptype = "terrain-background", source = "stamen")
+ggmap(cap_map_base)
+```
+
+```{r}
+ggmap(cap_map_base) + 
+  geom_point(data = turtles3, aes(Cap_Longitude,Cap_Latitude,color=Gear,shape=dead_alive_new), size = 2, alpha = 0.7) +
+           labs(x = "Longitude", y = "Latitude", title = "Capture Locations")
+```
+
+```{r}
+turtles3%>%
+  select(Rel_Latitude,Rel_Longitude)%>%
+  summary()
+```
+
+```{r}
+rel_lat <- c(27.82, 39)
+rel_long <- c(-81.24, -36.03)
+bbox2 <- make_bbox(rel_long, rel_lat, f = 0.05)
+```
+
+```{r}
+rel_map_base <- get_map(bbox2, maptype = "toner-background", source = "stamen")
+ggmap(rel_map_base)
+```
+```{r}
+ggmap(rel_map_base) + 
+  geom_point(data = turtles3, aes(Rel_Longitude,Rel_Latitude,color=Species), size = 2, alpha = 0.7) +
+           labs(x = "Longitude", y = "Latitude", title = "Release Locations")
+```
+
+```{r}
+#install.packages("lubridate")
+library(lubridate)
+```
+```{r}
+turtles4<-turtles3%>%
+  mutate(DateCapture_new=dmy(DateCapture))%>%
+  filter(!is.na(DateCapture_new))
+head(turtles4)
+```
+```{r}
+turtles5<-turtles4%>%
+  mutate(Capture_year=year(DateCapture_new))%>%
+  mutate(Capture_month=month(DateCapture_new))%>%
+  mutate(Capture_day=day(DateCapture_new))%>%
+  mutate(capture_week_day=wday(DateCapture_new))
+head(turtles5)
+```
+```{r}
+turtles5%>%
+  group_by(Capture_year)%>%
+  summarise(n())
+turtles5%>%
+  group_by(Capture_month)%>%
+  summarise(n())
+turtles5%>%
+  group_by(Capture_day)%>%
+  summarise(n())
+turtles5%>%
+  group_by(capture_week_day)%>%
+  summarise(n())
+```
+
+```{r}
+days_of_week<-c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
+```
+
+```{r}
+turtles5%>%
+  ggplot(aes(x=capture_week_day))+
+  geom_bar(position = "dodge")
+```
 

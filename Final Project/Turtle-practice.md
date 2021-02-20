@@ -403,3 +403,648 @@ turtles3%>%
 ##            <NA>     1 7.443245e-05            NA
 ```
 
+```r
+library(ggmap)
+```
+
+```
+## Google's Terms of Service: https://cloud.google.com/maps-platform/terms/.
+```
+
+```
+## Please cite ggmap if you use it! See citation("ggmap") for details.
+```
+
+```r
+library(tidyverse)
+library(rgeos)
+```
+
+```
+## Loading required package: sp
+```
+
+```
+## rgeos version: 0.5-5, (SVN revision 640)
+##  GEOS runtime version: 3.8.0-CAPI-1.13.1 
+##  Linking to sp version: 1.4-5 
+##  Polygon checking: TRUE
+```
+
+```r
+library(rgdal)
+```
+
+```
+## rgdal: version: 1.5-23, (SVN revision 1121)
+## Geospatial Data Abstraction Library extensions to R successfully loaded
+## Loaded GDAL runtime: GDAL 3.2.1, released 2020/12/29
+## Path to GDAL shared files: C:/Users/ericc/Documents/R/win-library/4.0/rgdal/gdal
+## GDAL binary built with GEOS: TRUE 
+## Loaded PROJ runtime: Rel. 7.2.1, January 1st, 2021, [PJ_VERSION: 721]
+## Path to PROJ shared files: C:/Users/ericc/Documents/R/win-library/4.0/rgdal/proj
+## PROJ CDN enabled: FALSE
+## Linking to sp version:1.4-5
+## To mute warnings of possible GDAL/OSR exportToProj4() degradation,
+## use options("rgdal_show_exportToProj4_warnings"="none") before loading rgdal.
+## Overwritten PROJ_LIB was C:/Users/ericc/Documents/R/win-library/4.0/rgdal/proj
+```
+
+```r
+library(devtools)
+```
+
+```
+## Loading required package: usethis
+```
+
+
+```r
+names(turtles3)
+```
+
+```
+##  [1] "year"                     "Turtle_ID"               
+##  [3] "ResearchType"             "DateCapture"             
+##  [5] "Species"                  "Master_tag"              
+##  [7] "Dead_Alive"               "RecordType"              
+##  [9] "Inconel_Tag"              "BodyArea"                
+## [11] "PIT_tag"                  "BodyArea_PIT"            
+## [13] "DateRelease"              "Gear"                    
+## [15] "SCL_notch"                "SCL_tip"                 
+## [17] "SCW"                      "CCL_notch"               
+## [19] "CCL_tip"                  "CCW"                     
+## [21] "Circumference"            "Girth"                   
+## [23] "Depth_.mid"               "Tail"                    
+## [25] "Weight"                   "Cap_Region"              
+## [27] "Rel_Region"               "Cap_Latitude"            
+## [29] "Cap_Longitude"            "Rel_Latitude"            
+## [31] "Rel_Longitude"            "HepTube_Before"          
+## [33] "HepTube_After"            "TestLevel_Before"        
+## [35] "TestLevel_After"          "Lysis_tube_ID"           
+## [37] "Skin_Biopsy_ID"           "Haplotype"               
+## [39] "Oxtetracyclene"           "Health_Blood"            
+## [41] "Satellite_tag"            "Holding_Facility"        
+## [43] "Sex_laparoscopy"          "Sex_Necropsy"            
+## [45] "Sex_Testosterone_Level_1" "Sex_Testosterone_Level_2"
+## [47] "State"                    "Hematology"              
+## [49] "OC_OB"                    "FH"                      
+## [51] "Metals"                   "SIA_skin"                
+## [53] "SIA_bone"                 "SIA_blood"               
+## [55] "SIA_barnacles"            "SIA_scutes"              
+## [57] "SIA_analyzed"             "Photos"                  
+## [59] "Scute"                    "Cloacal"                 
+## [61] "Lesion"                   "Fat"                     
+## [63] "Fecal"                    "Pathogens"               
+## [65] "PCV"                      "TS"                      
+## [67] "Entangled"                "Imaging"                 
+## [69] "OrganBiopsy"              "LivingTag"               
+## [71] "RadioTag"                 "AcousticTag"             
+## [73] "dead_alive_new"
+```
+
+```r
+head(turtles3)
+```
+
+```
+##   year Turtle_ID  ResearchType DateCapture      Species Master_tag Dead_Alive
+## 1 1995         1 Misc. Tagging   16-May-95        Green     QQS241      Alive
+## 2 1995         1 Misc. Tagging   16-May-95        Green     QQS241      Alive
+## 3 1995         2 Misc. Tagging   24-Apr-95   Loggerhead     QQV299      Alive
+## 4 1995         2 Misc. Tagging   24-Apr-95   Loggerhead     QQV299      Alive
+## 5 1995         3 Misc. Tagging   12-Jun-95 Kemps_Ridley     QQV296      Alive
+## 6 1995         3 Misc. Tagging   12-Jun-95 Kemps_Ridley     QQV296      Alive
+##   RecordType Inconel_Tag   BodyArea    PIT_tag BodyArea_PIT DateRelease
+## 1    Release      QQS241  Left Rear       None         <NA>   17-May-95
+## 2    Release      QQS242 Right Rear       None         <NA>   17-May-95
+## 3    Release      QQV299  Left Rear NOT TAGGED         <NA>   26-May-95
+## 4    Release      QQV300 Right Rear NOT TAGGED         <NA>   26-May-95
+## 5    Release      QQV296  Left Rear       None         <NA>   12-Jun-95
+## 6    Release      QQV297 Right Rear       None         <NA>   12-Jun-95
+##        Gear SCL_notch SCL_tip  SCW CCL_notch CCL_tip  CCW Circumference Girth
+## 1  Gill net      29.8    30.2 25.3      31.0    31.5 28.0            NA    NA
+## 2  Gill net      29.8    30.2 25.3      31.0    31.5 28.0            NA    NA
+## 3  Gill net      45.9    46.4 39.8      49.4    50.2 47.7            NA    NA
+## 4  Gill net      45.9    46.4 39.8      49.4    50.2 47.7            NA    NA
+## 5 Pound net      44.5    45.1 42.0      46.1    46.5 46.0            NA    NA
+## 6 Pound net      44.5    45.1 42.0      46.1    46.5 46.0            NA    NA
+##   Depth_.mid Tail Weight Cap_Region Rel_Region Cap_Latitude Cap_Longitude
+## 1         NA   NA    3.8    Inshore    Inshore        34.78      -76.7233
+## 2         NA   NA    3.8    Inshore    Inshore        34.78      -76.7233
+## 3         NA   NA   15.3    Inshore   Offshore        34.77      -76.7500
+## 4         NA   NA   15.3    Inshore   Offshore        34.77      -76.7500
+## 5         NA   NA     NA    Inshore    Inshore        34.96      -76.2633
+## 6         NA   NA     NA    Inshore    Inshore        34.96      -76.2633
+##   Rel_Latitude Rel_Longitude HepTube_Before HepTube_After TestLevel_Before
+## 1        34.73     -76.69000           <NA>          <NA>               NA
+## 2        34.73     -76.69000           <NA>          <NA>               NA
+## 3        34.66     -76.66167           <NA>          <NA>               NA
+## 4        34.66     -76.66167           <NA>          <NA>               NA
+## 5        35.00     -76.30500           <NA>          <NA>               NA
+## 6        35.00     -76.30500           <NA>          <NA>               NA
+##   TestLevel_After Lysis_tube_ID Skin_Biopsy_ID Haplotype Oxtetracyclene
+## 1              NA             1             NA      <NA>          FALSE
+## 2              NA             1             NA      <NA>          FALSE
+## 3              NA             2             NA      <NA>          FALSE
+## 4              NA             2             NA      <NA>          FALSE
+## 5              NA             3             NA      <NA>          FALSE
+## 6              NA             3             NA      <NA>          FALSE
+##   Health_Blood Satellite_tag Holding_Facility          Sex_laparoscopy
+## 1        FALSE         FALSE             <NA> Sample was not collected
+## 2        FALSE         FALSE             <NA> Sample was not collected
+## 3        FALSE         FALSE             <NA> Sample was not collected
+## 4        FALSE         FALSE             <NA> Sample was not collected
+## 5        FALSE         FALSE             <NA> Sample was not collected
+## 6        FALSE         FALSE             <NA> Sample was not collected
+##               Sex_Necropsy Sex_Testosterone_Level_1 Sex_Testosterone_Level_2
+## 1                     <NA>                     <NA>                     <NA>
+## 2                     <NA>                     <NA>                     <NA>
+## 3                     <NA>                     <NA>                     <NA>
+## 4                     <NA>                     <NA>                     <NA>
+## 5 Sample was not collected Sample was not collected Sample was not collected
+## 6 Sample was not collected Sample was not collected Sample was not collected
+##   State Hematology OC_OB    FH Metals SIA_skin SIA_bone SIA_blood SIA_barnacles
+## 1    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+## 2    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+## 3    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+## 4    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+## 5    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+## 6    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+##   SIA_scutes SIA_analyzed Photos Scute Cloacal Lesion   Fat Fecal Pathogens PCV
+## 1      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+## 2      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+## 3      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+## 4      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+## 5      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+## 6      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+##   TS Entangled Imaging OrganBiopsy LivingTag RadioTag AcousticTag
+## 1 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+## 2 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+## 3 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+## 4 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+## 5 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+## 6 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+##   dead_alive_new
+## 1          Alive
+## 2          Alive
+## 3          Alive
+## 4          Alive
+## 5          Alive
+## 6          Alive
+```
+
+```r
+turtles3%>%
+  tabyl(ResearchType)
+```
+
+```
+##                   ResearchType    n   percent
+##  Index of Abundance  pound net 4716 0.3510234
+##                  Misc. Tagging 8719 0.6489766
+```
+
+
+```r
+turtles3%>%
+  tabyl(BodyArea)
+```
+
+```
+##     BodyArea    n     percent valid_percent
+##   Left Front  162 0.012058057    0.01207964
+##    Left Rear 6618 0.492593971    0.49347551
+##  Right Front  151 0.011239300    0.01125941
+##   Right Rear 6480 0.482322293    0.48318544
+##         <NA>   24 0.001786379            NA
+```
+
+
+
+```r
+turtles3%>%
+  select(Cap_Latitude,Cap_Longitude)%>%
+  summary()
+```
+
+```
+##   Cap_Latitude   Cap_Longitude   
+##  Min.   :33.49   Min.   :-79.08  
+##  1st Qu.:34.84   1st Qu.:-76.38  
+##  Median :34.93   Median :-76.27  
+##  Mean   :34.96   Mean   :-76.24  
+##  3rd Qu.:35.05   3rd Qu.:-76.13  
+##  Max.   :38.41   Max.   :-75.47
+```
+
+
+```r
+cap_lat <- c(33.49, 38.41)
+cap_long <- c(-79.08, -75.47)
+bbox <- make_bbox(cap_long, cap_lat, f = 0.1)
+```
+
+
+```r
+cap_map_base <- get_map(bbox, maptype = "terrain-background", source = "stamen")
+```
+
+```
+## Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under ODbL.
+```
+
+```r
+ggmap(cap_map_base)
+```
+
+![](Turtle-practice_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+
+
+```r
+ggmap(cap_map_base) + 
+  geom_point(data = turtles3, aes(Cap_Longitude,Cap_Latitude,color=Gear,shape=dead_alive_new), size = 2, alpha = 0.7) +
+           labs(x = "Longitude", y = "Latitude", title = "Capture Locations")
+```
+
+```
+## Warning: Removed 1 rows containing missing values (geom_point).
+```
+
+![](Turtle-practice_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
+
+
+```r
+turtles3%>%
+  select(Rel_Latitude,Rel_Longitude)%>%
+  summary()
+```
+
+```
+##   Rel_Latitude   Rel_Longitude   
+##  Min.   :27.82   Min.   :-81.24  
+##  1st Qu.:34.83   1st Qu.:-76.38  
+##  Median :34.89   Median :-76.33  
+##  Mean   :34.92   Mean   :-76.26  
+##  3rd Qu.:35.04   3rd Qu.:-76.12  
+##  Max.   :39.00   Max.   :-36.03  
+##  NA's   :351     NA's   :353
+```
+
+
+```r
+rel_lat <- c(27.82, 39)
+rel_long <- c(-81.24, -36.03)
+bbox2 <- make_bbox(rel_long, rel_lat, f = 0.05)
+```
+
+
+```r
+rel_map_base <- get_map(bbox2, maptype = "toner-background", source = "stamen")
+```
+
+```
+## Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under ODbL.
+```
+
+```r
+ggmap(rel_map_base)
+```
+
+![](Turtle-practice_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
+
+```r
+ggmap(rel_map_base) + 
+  geom_point(data = turtles3, aes(Rel_Longitude,Rel_Latitude,color=Species), size = 2, alpha = 0.7) +
+           labs(x = "Longitude", y = "Latitude", title = "Release Locations")
+```
+
+```
+## Warning: Removed 353 rows containing missing values (geom_point).
+```
+
+![](Turtle-practice_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
+
+
+```r
+#install.packages("lubridate")
+library(lubridate)
+```
+
+```
+## 
+## Attaching package: 'lubridate'
+```
+
+```
+## The following objects are masked from 'package:rgeos':
+## 
+##     intersect, setdiff, union
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     date, intersect, setdiff, union
+```
+
+```r
+turtles4<-turtles3%>%
+  mutate(DateCapture_new=dmy(DateCapture))%>%
+  filter(!is.na(DateCapture_new))
+head(turtles4)
+```
+
+```
+##   year Turtle_ID  ResearchType DateCapture      Species Master_tag Dead_Alive
+## 1 1995         1 Misc. Tagging   16-May-95        Green     QQS241      Alive
+## 2 1995         1 Misc. Tagging   16-May-95        Green     QQS241      Alive
+## 3 1995         2 Misc. Tagging   24-Apr-95   Loggerhead     QQV299      Alive
+## 4 1995         2 Misc. Tagging   24-Apr-95   Loggerhead     QQV299      Alive
+## 5 1995         3 Misc. Tagging   12-Jun-95 Kemps_Ridley     QQV296      Alive
+## 6 1995         3 Misc. Tagging   12-Jun-95 Kemps_Ridley     QQV296      Alive
+##   RecordType Inconel_Tag   BodyArea    PIT_tag BodyArea_PIT DateRelease
+## 1    Release      QQS241  Left Rear       None         <NA>   17-May-95
+## 2    Release      QQS242 Right Rear       None         <NA>   17-May-95
+## 3    Release      QQV299  Left Rear NOT TAGGED         <NA>   26-May-95
+## 4    Release      QQV300 Right Rear NOT TAGGED         <NA>   26-May-95
+## 5    Release      QQV296  Left Rear       None         <NA>   12-Jun-95
+## 6    Release      QQV297 Right Rear       None         <NA>   12-Jun-95
+##        Gear SCL_notch SCL_tip  SCW CCL_notch CCL_tip  CCW Circumference Girth
+## 1  Gill net      29.8    30.2 25.3      31.0    31.5 28.0            NA    NA
+## 2  Gill net      29.8    30.2 25.3      31.0    31.5 28.0            NA    NA
+## 3  Gill net      45.9    46.4 39.8      49.4    50.2 47.7            NA    NA
+## 4  Gill net      45.9    46.4 39.8      49.4    50.2 47.7            NA    NA
+## 5 Pound net      44.5    45.1 42.0      46.1    46.5 46.0            NA    NA
+## 6 Pound net      44.5    45.1 42.0      46.1    46.5 46.0            NA    NA
+##   Depth_.mid Tail Weight Cap_Region Rel_Region Cap_Latitude Cap_Longitude
+## 1         NA   NA    3.8    Inshore    Inshore        34.78      -76.7233
+## 2         NA   NA    3.8    Inshore    Inshore        34.78      -76.7233
+## 3         NA   NA   15.3    Inshore   Offshore        34.77      -76.7500
+## 4         NA   NA   15.3    Inshore   Offshore        34.77      -76.7500
+## 5         NA   NA     NA    Inshore    Inshore        34.96      -76.2633
+## 6         NA   NA     NA    Inshore    Inshore        34.96      -76.2633
+##   Rel_Latitude Rel_Longitude HepTube_Before HepTube_After TestLevel_Before
+## 1        34.73     -76.69000           <NA>          <NA>               NA
+## 2        34.73     -76.69000           <NA>          <NA>               NA
+## 3        34.66     -76.66167           <NA>          <NA>               NA
+## 4        34.66     -76.66167           <NA>          <NA>               NA
+## 5        35.00     -76.30500           <NA>          <NA>               NA
+## 6        35.00     -76.30500           <NA>          <NA>               NA
+##   TestLevel_After Lysis_tube_ID Skin_Biopsy_ID Haplotype Oxtetracyclene
+## 1              NA             1             NA      <NA>          FALSE
+## 2              NA             1             NA      <NA>          FALSE
+## 3              NA             2             NA      <NA>          FALSE
+## 4              NA             2             NA      <NA>          FALSE
+## 5              NA             3             NA      <NA>          FALSE
+## 6              NA             3             NA      <NA>          FALSE
+##   Health_Blood Satellite_tag Holding_Facility          Sex_laparoscopy
+## 1        FALSE         FALSE             <NA> Sample was not collected
+## 2        FALSE         FALSE             <NA> Sample was not collected
+## 3        FALSE         FALSE             <NA> Sample was not collected
+## 4        FALSE         FALSE             <NA> Sample was not collected
+## 5        FALSE         FALSE             <NA> Sample was not collected
+## 6        FALSE         FALSE             <NA> Sample was not collected
+##               Sex_Necropsy Sex_Testosterone_Level_1 Sex_Testosterone_Level_2
+## 1                     <NA>                     <NA>                     <NA>
+## 2                     <NA>                     <NA>                     <NA>
+## 3                     <NA>                     <NA>                     <NA>
+## 4                     <NA>                     <NA>                     <NA>
+## 5 Sample was not collected Sample was not collected Sample was not collected
+## 6 Sample was not collected Sample was not collected Sample was not collected
+##   State Hematology OC_OB    FH Metals SIA_skin SIA_bone SIA_blood SIA_barnacles
+## 1    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+## 2    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+## 3    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+## 4    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+## 5    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+## 6    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+##   SIA_scutes SIA_analyzed Photos Scute Cloacal Lesion   Fat Fecal Pathogens PCV
+## 1      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+## 2      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+## 3      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+## 4      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+## 5      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+## 6      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+##   TS Entangled Imaging OrganBiopsy LivingTag RadioTag AcousticTag
+## 1 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+## 2 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+## 3 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+## 4 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+## 5 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+## 6 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+##   dead_alive_new DateCapture_new
+## 1          Alive      1995-05-16
+## 2          Alive      1995-05-16
+## 3          Alive      1995-04-24
+## 4          Alive      1995-04-24
+## 5          Alive      1995-06-12
+## 6          Alive      1995-06-12
+```
+
+```r
+turtles5<-turtles4%>%
+  mutate(Capture_year=year(DateCapture_new))%>%
+  mutate(Capture_month=month(DateCapture_new))%>%
+  mutate(Capture_day=day(DateCapture_new))%>%
+  mutate(capture_week_day=wday(DateCapture_new))
+head(turtles5)
+```
+
+```
+##   year Turtle_ID  ResearchType DateCapture      Species Master_tag Dead_Alive
+## 1 1995         1 Misc. Tagging   16-May-95        Green     QQS241      Alive
+## 2 1995         1 Misc. Tagging   16-May-95        Green     QQS241      Alive
+## 3 1995         2 Misc. Tagging   24-Apr-95   Loggerhead     QQV299      Alive
+## 4 1995         2 Misc. Tagging   24-Apr-95   Loggerhead     QQV299      Alive
+## 5 1995         3 Misc. Tagging   12-Jun-95 Kemps_Ridley     QQV296      Alive
+## 6 1995         3 Misc. Tagging   12-Jun-95 Kemps_Ridley     QQV296      Alive
+##   RecordType Inconel_Tag   BodyArea    PIT_tag BodyArea_PIT DateRelease
+## 1    Release      QQS241  Left Rear       None         <NA>   17-May-95
+## 2    Release      QQS242 Right Rear       None         <NA>   17-May-95
+## 3    Release      QQV299  Left Rear NOT TAGGED         <NA>   26-May-95
+## 4    Release      QQV300 Right Rear NOT TAGGED         <NA>   26-May-95
+## 5    Release      QQV296  Left Rear       None         <NA>   12-Jun-95
+## 6    Release      QQV297 Right Rear       None         <NA>   12-Jun-95
+##        Gear SCL_notch SCL_tip  SCW CCL_notch CCL_tip  CCW Circumference Girth
+## 1  Gill net      29.8    30.2 25.3      31.0    31.5 28.0            NA    NA
+## 2  Gill net      29.8    30.2 25.3      31.0    31.5 28.0            NA    NA
+## 3  Gill net      45.9    46.4 39.8      49.4    50.2 47.7            NA    NA
+## 4  Gill net      45.9    46.4 39.8      49.4    50.2 47.7            NA    NA
+## 5 Pound net      44.5    45.1 42.0      46.1    46.5 46.0            NA    NA
+## 6 Pound net      44.5    45.1 42.0      46.1    46.5 46.0            NA    NA
+##   Depth_.mid Tail Weight Cap_Region Rel_Region Cap_Latitude Cap_Longitude
+## 1         NA   NA    3.8    Inshore    Inshore        34.78      -76.7233
+## 2         NA   NA    3.8    Inshore    Inshore        34.78      -76.7233
+## 3         NA   NA   15.3    Inshore   Offshore        34.77      -76.7500
+## 4         NA   NA   15.3    Inshore   Offshore        34.77      -76.7500
+## 5         NA   NA     NA    Inshore    Inshore        34.96      -76.2633
+## 6         NA   NA     NA    Inshore    Inshore        34.96      -76.2633
+##   Rel_Latitude Rel_Longitude HepTube_Before HepTube_After TestLevel_Before
+## 1        34.73     -76.69000           <NA>          <NA>               NA
+## 2        34.73     -76.69000           <NA>          <NA>               NA
+## 3        34.66     -76.66167           <NA>          <NA>               NA
+## 4        34.66     -76.66167           <NA>          <NA>               NA
+## 5        35.00     -76.30500           <NA>          <NA>               NA
+## 6        35.00     -76.30500           <NA>          <NA>               NA
+##   TestLevel_After Lysis_tube_ID Skin_Biopsy_ID Haplotype Oxtetracyclene
+## 1              NA             1             NA      <NA>          FALSE
+## 2              NA             1             NA      <NA>          FALSE
+## 3              NA             2             NA      <NA>          FALSE
+## 4              NA             2             NA      <NA>          FALSE
+## 5              NA             3             NA      <NA>          FALSE
+## 6              NA             3             NA      <NA>          FALSE
+##   Health_Blood Satellite_tag Holding_Facility          Sex_laparoscopy
+## 1        FALSE         FALSE             <NA> Sample was not collected
+## 2        FALSE         FALSE             <NA> Sample was not collected
+## 3        FALSE         FALSE             <NA> Sample was not collected
+## 4        FALSE         FALSE             <NA> Sample was not collected
+## 5        FALSE         FALSE             <NA> Sample was not collected
+## 6        FALSE         FALSE             <NA> Sample was not collected
+##               Sex_Necropsy Sex_Testosterone_Level_1 Sex_Testosterone_Level_2
+## 1                     <NA>                     <NA>                     <NA>
+## 2                     <NA>                     <NA>                     <NA>
+## 3                     <NA>                     <NA>                     <NA>
+## 4                     <NA>                     <NA>                     <NA>
+## 5 Sample was not collected Sample was not collected Sample was not collected
+## 6 Sample was not collected Sample was not collected Sample was not collected
+##   State Hematology OC_OB    FH Metals SIA_skin SIA_bone SIA_blood SIA_barnacles
+## 1    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+## 2    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+## 3    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+## 4    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+## 5    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+## 6    NC      FALSE FALSE FALSE  FALSE    FALSE    FALSE     FALSE         FALSE
+##   SIA_scutes SIA_analyzed Photos Scute Cloacal Lesion   Fat Fecal Pathogens PCV
+## 1      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+## 2      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+## 3      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+## 4      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+## 5      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+## 6      FALSE        FALSE  FALSE FALSE   FALSE  FALSE FALSE FALSE     FALSE  NA
+##   TS Entangled Imaging OrganBiopsy LivingTag RadioTag AcousticTag
+## 1 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+## 2 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+## 3 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+## 4 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+## 5 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+## 6 NA     FALSE   FALSE       FALSE     FALSE    FALSE       FALSE
+##   dead_alive_new DateCapture_new Capture_year Capture_month Capture_day
+## 1          Alive      1995-05-16         1995             5          16
+## 2          Alive      1995-05-16         1995             5          16
+## 3          Alive      1995-04-24         1995             4          24
+## 4          Alive      1995-04-24         1995             4          24
+## 5          Alive      1995-06-12         1995             6          12
+## 6          Alive      1995-06-12         1995             6          12
+##   capture_week_day
+## 1                3
+## 2                3
+## 3                2
+## 4                2
+## 5                2
+## 6                2
+```
+
+```r
+turtles5%>%
+  group_by(Capture_year)%>%
+  summarise(n())
+```
+
+```
+## # A tibble: 28 x 2
+##    Capture_year `n()`
+##  *        <dbl> <int>
+##  1         1988   154
+##  2         1989    82
+##  3         1990    18
+##  4         1991    17
+##  5         1992    50
+##  6         1993    22
+##  7         1994   193
+##  8         1995   464
+##  9         1996   500
+## 10         1997   463
+## # ... with 18 more rows
+```
+
+```r
+turtles5%>%
+  group_by(Capture_month)%>%
+  summarise(n())
+```
+
+```
+## # A tibble: 12 x 2
+##    Capture_month `n()`
+##  *         <dbl> <int>
+##  1             1    41
+##  2             2     9
+##  3             3     8
+##  4             4    15
+##  5             5   945
+##  6             6  1567
+##  7             7  1556
+##  8             8  1201
+##  9             9   918
+## 10            10  2735
+## 11            11  4106
+## 12            12   334
+```
+
+```r
+turtles5%>%
+  group_by(Capture_day)%>%
+  summarise(n())
+```
+
+```
+## # A tibble: 31 x 2
+##    Capture_day `n()`
+##  *       <int> <int>
+##  1           1   432
+##  2           2   415
+##  3           3   222
+##  4           4   383
+##  5           5   445
+##  6           6   469
+##  7           7   487
+##  8           8   374
+##  9           9   458
+## 10          10   586
+## # ... with 21 more rows
+```
+
+```r
+turtles5%>%
+  group_by(capture_week_day)%>%
+  summarise(n())
+```
+
+```
+## # A tibble: 7 x 2
+##   capture_week_day `n()`
+## *            <dbl> <int>
+## 1                1   352
+## 2                2  3530
+## 3                3  2315
+## 4                4  1574
+## 5                5  1590
+## 6                6  3613
+## 7                7   461
+```
+
+
+```r
+days_of_week<-c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
+```
+
+
+```r
+turtles5%>%
+  ggplot(aes(x=capture_week_day))+
+  geom_bar(position = "dodge")
+```
+
+![](Turtle-practice_files/figure-html/unnamed-chunk-35-1.png)<!-- -->
+
