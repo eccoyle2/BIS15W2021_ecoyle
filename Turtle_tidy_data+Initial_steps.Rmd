@@ -1,0 +1,186 @@
+---
+title: "Turtles tidied data"
+author: "Eric Coyle"
+date: "2/21/2021"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(here)
+library(tidyverse)
+library(naniar)
+library(janitor)
+library(shiny)
+library(paletteer)
+library(ggmap)
+library(rgeos)
+library(rgdal)
+library(devtools)
+```
+
+
+```{r}
+turtles<-read.csv(here("Final Project","Turtle_data.csv"))
+```
+
+```{r}
+turtles_tidy<-turtles%>%
+  na_if("")%>%
+  na_if("0")%>%
+  na_if("0.0")%>%
+  mutate(dead_alive_new=if_else(Dead_Alive=="alive","Alive",Dead_Alive))
+```
+
+```{r}
+library(lubridate)
+```
+
+```{r}
+turtles3<-turtles_tidy%>%
+  mutate(DateCapture_new=dmy(DateCapture))%>%
+  filter(!is.na(DateCapture_new))%>%
+  mutate(Capture_month=month(DateCapture_new))%>%
+  mutate(Capture_day=day(DateCapture_new))%>%
+  mutate(capture_week_day=wday(DateCapture_new))
+head(turtles3)
+```
+
+#mapping for release and capture sites
+
+```{r}
+turtles3%>%
+  select(Cap_Latitude,Cap_Longitude)%>%
+  summary()
+```
+
+```{r}
+cap_lat <- c(33.49, 38.41)
+cap_long <- c(-79.08, -75.47)
+bbox <- make_bbox(cap_long, cap_lat, f = 0.1)
+```
+
+```{r}
+cap_map_base <- get_map(bbox, maptype = "terrain-background", source = "stamen")
+ggmap(cap_map_base)
+```
+
+
+
+```{r}
+ggmap(cap_map_base) + 
+  geom_point(data = turtles3, aes(Cap_Longitude,Cap_Latitude,color=Species,shape=dead_alive_new), size = 2, alpha = 0.7) +
+           labs(x = "Longitude", y = "Latitude", title = "Capture Locations")
+```
+```{r}
+turtles3%>%
+  select(Rel_Latitude,Rel_Longitude)%>%
+  summary()
+```
+
+```{r}
+rel_lat <- c(27.82, 39)
+rel_long <- c(-81.24, -36.03)
+bbox2 <- make_bbox(rel_long, rel_lat, f = 0.05)
+```
+
+```{r}
+rel_map_base <- get_map(bbox2, maptype = "terrain-background", source = "stamen")
+ggmap(rel_map_base)
+```
+```{r}
+ggmap(rel_map_base) + 
+  geom_point(data = turtles3, aes(Rel_Longitude,Rel_Latitude,color=Species), size = 2, alpha = 0.7) +
+           labs(x = "Longitude", y = "Latitude", title = "Release Locations")
+```
+#we can then make additional maps with color or shape of the dots for different variables. We also should pick a unifying color scheme/text/chart and map theme for all of our images (Ideally a color that stands out against the terrain background if we want to stick with terrain for our maps)
+
+#The following are some ideas for graphs that I thought would be good to include, but we can each come up and explore some of our own to compile into the final product
+
+```{r}
+turtles3%>%
+  group_by(year)%>%
+  summarise(n())
+```
+```{r}
+turtles3%>%
+  group_by(year)%>%
+  ggplot(aes(x=year,fill=dead_alive_new))+
+  geom_bar(position = "dodge")
+```
+
+
+```{r}
+turtles3%>%
+  group_by(Capture_month)%>%
+  summarise(n())
+```
+```{r}
+turtles3%>%
+  ggplot(aes(month(x=DateCapture_new,label=TRUE)))+
+  geom_bar(position = "dodge")+
+  labs(x = NULL,
+         y = "Number of Captures")
+```
+
+
+```{r}
+turtles3%>%
+  group_by(Capture_day)%>%
+  summarise(n())
+```
+
+```{r}
+turtles3%>%
+  ggplot(aes(day(x=DateCapture_new)))+
+  geom_bar()+
+  labs(x = NULL,
+         y = "Number of Captures")
+```
+
+
+```{r}
+turtles3%>%
+  group_by(capture_week_day)%>%
+  summarise(n())
+```
+```{r}
+turtles3%>%
+  ggplot(aes(wday(x=DateCapture_new,label=TRUE)))+
+  geom_bar()+
+  labs(x = NULL,
+         y = "Number of Captures")
+```
+#Monday and Friday are popular trapping days apparently
+
+```{r}
+turtles3%>%
+  group_by(year)%>%
+  mutate(mean_body_length=mean(SCL_tip,na.rm=T))%>%
+  ggplot(aes(x=year,y=mean_body_length,group=1,color=Species))+
+  geom_line()+
+  geom_point()+
+  facet_wrap(~Species)
+```
+```{r}
+turtles3%>%
+  ggplot(aes(x=Species,y=CCL_tip,color=Species))+
+  geom_boxplot()
+```
+#we of course can fix the axis and replicate this kind of graph for other measurements (SCL_noth/SCl_tip, CCl_notch, etc)
+
+```{r}
+turtles3%>%
+  filter(Gear!=""&Species!="")%>%
+  ggplot(aes(x=Gear,fill=Species))+
+  geom_bar(position = "dodge")+
+  labs(title = "Gear used for Different Species",x="Gear",y="Number Captured with Given Method")+
+  theme(axis.text.x = element_text(angle = 60,hjust = 1))+
+  scale_y_log10()
+```
+
