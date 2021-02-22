@@ -63,13 +63,9 @@ turtles%>%
   filter(Dead_Alive=="")
 ```
 
-```{r}
-turtles_tidy<-turtles%>%
-  mutate_all(tolower)
-```
 
 ```{r}
-turtles_tidy%>%
+turtles%>%
   group_by(year)%>%
   filter(Dead_Alive!="")%>%
   ggplot(aes(x=year,fill=Dead_Alive))+
@@ -103,6 +99,7 @@ turtles_tidy2<-turtles%>%
   na_if("0")%>%
   na_if("0.0")
 ```
+
 ```{r}
 turtles_tidy2%>%
   tabyl(Sex_laparoscopy)

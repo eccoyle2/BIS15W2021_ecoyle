@@ -276,14 +276,9 @@ turtles%>%
 ```
 
 
-```r
-turtles_tidy<-turtles%>%
-  mutate_all(tolower)
-```
-
 
 ```r
-turtles_tidy%>%
+turtles%>%
   group_by(year)%>%
   filter(Dead_Alive!="")%>%
   ggplot(aes(x=year,fill=Dead_Alive))+
@@ -292,7 +287,7 @@ turtles_tidy%>%
   theme(axis.text.x = element_text(angle = 60,hjust = 1))
 ```
 
-![](Turtle-practice_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![](Turtle-practice_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
 ```r
 turtles%>%
@@ -365,7 +360,7 @@ turtles%>%
   theme(axis.text.x = element_text(angle = 60,hjust = 1))
 ```
 
-![](Turtle-practice_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+![](Turtle-practice_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
 ```r
 turtles_tidy2<-turtles%>%
@@ -373,6 +368,7 @@ turtles_tidy2<-turtles%>%
   na_if("0")%>%
   na_if("0.0")
 ```
+
 
 ```r
 turtles_tidy2%>%
@@ -658,7 +654,7 @@ cap_map_base <- get_map(bbox, maptype = "terrain-background", source = "stamen")
 ggmap(cap_map_base)
 ```
 
-![](Turtle-practice_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+![](Turtle-practice_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
 
 
 ```r
@@ -671,7 +667,7 @@ ggmap(cap_map_base) +
 ## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
-![](Turtle-practice_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
+![](Turtle-practice_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
 
 
 ```r
@@ -711,7 +707,7 @@ rel_map_base <- get_map(bbox2, maptype = "toner-background", source = "stamen")
 ggmap(rel_map_base)
 ```
 
-![](Turtle-practice_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
+![](Turtle-practice_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
 
 ```r
 ggmap(rel_map_base) + 
@@ -723,7 +719,7 @@ ggmap(rel_map_base) +
 ## Warning: Removed 353 rows containing missing values (geom_point).
 ```
 
-![](Turtle-practice_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
+![](Turtle-practice_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
 
 
 ```r
@@ -1046,5 +1042,5 @@ turtles5%>%
   geom_bar(position = "dodge")
 ```
 
-![](Turtle-practice_files/figure-html/unnamed-chunk-35-1.png)<!-- -->
+![](Turtle-practice_files/figure-html/unnamed-chunk-34-1.png)<!-- -->
 
