@@ -103,8 +103,8 @@ names(spiders)
 
 ```{r}
 ggmap(map2) + 
-  geom_point(data = spiders, aes(longitude, latitude,color=county)) +
-  labs(x = "Longitude", y = "Latitude", title = "Spider Locations")
+  geom_point(data = spiders, aes(longitude, latitude,color=county),alpha=.8,size=2) +
+  labs(x = "Longitude", y = "Latitude", title = "Spider Locations By County")
 ```
 
 ## Albers USA
@@ -163,7 +163,7 @@ library(svglite)
 
 We can spice things up a bit by adding aesthetics.
 ```{r}
-uso_map<-ggplot() +
+ggplot() +
   geom_sf(data = ca_comp, size = 0.125)+
   geom_sf(data = ca_cnty_comp, size = 0.125)+
   geom_point(data = spiders, aes(longitude, latitude))+
@@ -173,7 +173,7 @@ uso_map<-ggplot() +
   theme(axis.title.x = element_text(hjust=0.5, size = 10)) +
   theme(axis.title.y = element_blank()) +
   theme(panel.grid = element_blank()) +
-  theme(legend.position = c(0.9, 0.3))
+  theme(legend.position = c(0.9, 0.3))->uso_map
 
 ggsave(filename = "map.svg", device = "svg", plot = uso_map, height = 5, width = 7)
 ```
@@ -191,12 +191,16 @@ uso_map
 
 
 ```{r}
-
+spiders<-spiders%>%
+  mutate(troglo=if_else(str_detect(locality,"Cave"),"troglo","epig"))
 ```
 
 2. Now adjust the plot abot to give a different color for specimens that occur in caves.
 ```{r}
-
+ggplot() +
+  geom_sf(data = ca_comp, size = 0.125)+
+  geom_sf(data = ca_cnty_comp, size = 0.125)+
+  geom_point(data = spiders, aes(longitude, latitude,color=troglo,shape=troglo))
 ```
 
 ## That's it, let's take a break!   
