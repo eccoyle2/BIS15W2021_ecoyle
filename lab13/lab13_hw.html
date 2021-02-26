@@ -11,7 +11,7 @@
 
 <meta name="author" content="Eric Coyle" />
 
-<meta name="date" content="2021-02-25" />
+<meta name="date" content="2021-02-26" />
 
 <title>Lab 13 Homework</title>
 
@@ -167,7 +167,7 @@ pre code {
 
 <h1 class="title toc-ignore">Lab 13 Homework</h1>
 <h4 class="author">Eric Coyle</h4>
-<h4 class="date">2021-02-25</h4>
+<h4 class="date">2021-02-26</h4>
 
 </div>
 
@@ -251,14 +251,10 @@ library(janitor)</code></pre>
 ##                     3rd Qu.:  6899.5  
 ##                     Max.   :113755.0  
 ##                     NA&#39;s   :1</code></pre>
-<pre class="r"><code>UC_admit%&gt;%
-  filter(filtered_count_fr==NA)</code></pre>
-<pre><code>## # A tibble: 0 x 6
-## # ... with 6 variables: campus &lt;chr&gt;, academic_yr &lt;dbl&gt;, category &lt;chr&gt;,
-## #   ethnicity &lt;chr&gt;, perc_fr &lt;chr&gt;, filtered_count_fr &lt;dbl&gt;</code></pre>
+<pre class="r"><code>UC_admit$academic_yr&lt;-as.character(UC_admit$academic_yr)</code></pre>
 <p><strong>2. The president of UC has asked you to build a shiny app that shows admissions by ethnicity across all UC campuses. Your app should allow users to explore year, campus, and admit category as interactive variables. Use shiny dashboard and try to incorporate the aesthetics you have learned in ggplot to make the app neat and clean.</strong></p>
 <pre class="r"><code>ui &lt;- dashboardPage(
-  dashboardHeader(title = &quot;Ethnicity of UC System Admittees&quot;),
+  dashboardHeader(title = &quot;UC Ethnic Information&quot;),
   dashboardSidebar(disable = T),
   dashboardBody(
   fluidRow(
@@ -281,9 +277,10 @@ server &lt;- function(input, output, session) {
   UC_admit %&gt;% 
   ggplot(aes_string(x = input$x,y=&quot;filtered_count_fr&quot;,fill=&quot;ethnicity&quot;))+
   geom_col(position = &quot;dodge&quot;)+
+       scale_fill_brewer(palette = &quot;Set1&quot;)+
   theme_light(base_size = 18)+
       theme(axis.text.x = element_text(angle = 60, hjust = 1))+
-      labs(title = &quot;UC Admission Information&quot;,x=NULL,y=&quot;Number of Admittees&quot;)
+      labs(title = &quot;UC Admission Information&quot;,x=NULL,y=&quot;Number of Indivicuals&quot;)
   })
   
   
@@ -301,6 +298,76 @@ shinyApp(ui, server)</code></pre>
 ##      Admits 720 0.3333333
 ##  Applicants 720 0.3333333
 ##   Enrollees 720 0.3333333</code></pre>
+<p>#this following app is a less efficient and less clean way of comparing numbers across campus, ethnicity, and category as the second app below it, but I wanted to keep it to play around with later</p>
+<pre class="r"><code>ui &lt;- dashboardPage(
+  dashboardHeader(title = &quot;UC Enrollment&quot;),
+  dashboardSidebar(disable = T),
+  dashboardBody(
+  fluidRow(
+  box(title = &quot;Plot Options&quot;, width = 3,
+  selectInput(&quot;x&quot;, &quot;Student/Applicant Details&quot;, choices = c(&quot;ethnicity&quot;, &quot;category&quot;, &quot;campus&quot;), 
+              selected = &quot;campus&quot;),
+      hr(),
+      helpText(&quot;Source: (https://www.universityofcalifornia.edu/infocenter). Admissions data were collected for the years 2010-2019 for each UC campus.&quot;)
+  ), 
+  box(title = &quot;Academic Year&quot;, width = 6,
+  plotOutput(&quot;plot&quot;, width = &quot;600px&quot;, height = &quot;500px&quot;)
+  ) 
+  ) 
+  ) 
+)
+
+server &lt;- function(input, output, session) { 
+  
+  output$plot &lt;- renderPlot({
+  UC_admit %&gt;% 
+  ggplot(aes_string(x = &quot;academic_yr&quot;, y=&quot;filtered_count_fr&quot;,fill = input$x)) +
+  geom_col(position = &quot;dodge&quot;)+
+  theme_light(base_size = 18)
+  })
+  
+  session$onSessionEnded(stopApp)
+  }
+
+shinyApp(ui, server)</code></pre>
+<p><div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div> #this is the, in my opinion, better app for the question above</p>
+<pre class="r"><code>ui &lt;- dashboardPage(
+  dashboardHeader(title = &quot;UC Enrollment&quot;),
+  dashboardSidebar(disable = F),
+  dashboardBody(selectInput(&quot;campus&quot;, &quot; Select Campus:&quot;, 
+                  choices=unique(UC_admit$campus)),
+  fluidRow(
+  box(title = &quot;Plot Options&quot;, width = 4,
+  selectInput(&quot;x&quot;, &quot;Student/Applicant Details&quot;, choices = c(&quot;ethnicity&quot;, &quot;category&quot;), 
+              selected = &quot;campus&quot;),
+      hr(),
+      helpText(&quot;Source: (https://www.universityofcalifornia.edu/infocenter). Admissions data were collected for the years 2010-2019 for each UC campus.&quot;)
+  ), 
+  box(title = &quot;Academic Year&quot;, width = 6,
+  plotOutput(&quot;plot&quot;, width = &quot;600px&quot;, height = &quot;500px&quot;)
+  ) 
+  ) 
+  ) 
+)
+
+server &lt;- function(input, output, session) { 
+  
+  output$plot &lt;- renderPlot({
+  UC_admit %&gt;%
+      filter(campus == input$campus) %&gt;%
+  ggplot(aes_string(x = &quot;academic_yr&quot;, y=&quot;filtered_count_fr&quot;,fill = input$x)) +
+  geom_col(position = &quot;dodge&quot;)+
+       scale_fill_brewer(palette = &quot;Set1&quot;)+
+  theme_light(base_size = 18)+
+     theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+      labs(title = &quot;UC Admission Information&quot;,x=NULL,y=&quot;Number of Admittees&quot;)
+  })
+  
+  session$onSessionEnded(stopApp)
+  }
+
+shinyApp(ui, server)</code></pre>
+<p><div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div></p>
 </div>
 <div id="push-your-final-code-to-github" class="section level2">
 <h2>Push your final code to GitHub!</h2>

@@ -1,7 +1,7 @@
 ---
 title: "Lab 13 Homework"
 author: "Eric Coyle"
-date: "2021-02-25"
+date: "2021-02-26"
 output:
   html_document: 
     theme: spacelab
@@ -143,14 +143,7 @@ UC_admit%>%
 
 
 ```r
-UC_admit%>%
-  filter(filtered_count_fr==NA)
-```
-
-```
-## # A tibble: 0 x 6
-## # ... with 6 variables: campus <chr>, academic_yr <dbl>, category <chr>,
-## #   ethnicity <chr>, perc_fr <chr>, filtered_count_fr <dbl>
+UC_admit$academic_yr<-as.character(UC_admit$academic_yr)
 ```
 
 
@@ -159,7 +152,7 @@ UC_admit%>%
 
 ```r
 ui <- dashboardPage(
-  dashboardHeader(title = "Ethnicity of UC System Admittees"),
+  dashboardHeader(title = "UC Ethnic Information"),
   dashboardSidebar(disable = T),
   dashboardBody(
   fluidRow(
@@ -182,9 +175,10 @@ server <- function(input, output, session) {
   UC_admit %>% 
   ggplot(aes_string(x = input$x,y="filtered_count_fr",fill="ethnicity"))+
   geom_col(position = "dodge")+
+       scale_fill_brewer(palette = "Set1")+
   theme_light(base_size = 18)+
       theme(axis.text.x = element_text(angle = 60, hjust = 1))+
-      labs(title = "UC Admission Information",x=NULL,y="Number of Admittees")
+      labs(title = "UC Admission Information",x=NULL,y="Number of Indivicuals")
   })
   
   
@@ -218,10 +212,87 @@ UC_admit%>%
 ##  Applicants 720 0.3333333
 ##   Enrollees 720 0.3333333
 ```
+#this following app is a less efficient and less clean way of comparing numbers across campus, ethnicity, and category as the second app below it, but I wanted to keep it to play around with later
 
 
+```r
+ui <- dashboardPage(
+  dashboardHeader(title = "UC Enrollment"),
+  dashboardSidebar(disable = T),
+  dashboardBody(
+  fluidRow(
+  box(title = "Plot Options", width = 3,
+  selectInput("x", "Student/Applicant Details", choices = c("ethnicity", "category", "campus"), 
+              selected = "campus"),
+      hr(),
+      helpText("Source: (https://www.universityofcalifornia.edu/infocenter). Admissions data were collected for the years 2010-2019 for each UC campus.")
+  ), 
+  box(title = "Academic Year", width = 6,
+  plotOutput("plot", width = "600px", height = "500px")
+  ) 
+  ) 
+  ) 
+)
+
+server <- function(input, output, session) { 
+  
+  output$plot <- renderPlot({
+  UC_admit %>% 
+  ggplot(aes_string(x = "academic_yr", y="filtered_count_fr",fill = input$x)) +
+  geom_col(position = "dodge")+
+  theme_light(base_size = 18)
+  })
+  
+  session$onSessionEnded(stopApp)
+  }
+
+shinyApp(ui, server)
+```
+
+`<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>`{=html}
+#this is the, in my opinion, better app for the question above
 
 
+```r
+ui <- dashboardPage(
+  dashboardHeader(title = "UC Enrollment"),
+  dashboardSidebar(disable = F),
+  dashboardBody(selectInput("campus", " Select Campus:", 
+                  choices=unique(UC_admit$campus)),
+  fluidRow(
+  box(title = "Plot Options", width = 4,
+  selectInput("x", "Student/Applicant Details", choices = c("ethnicity", "category"), 
+              selected = "campus"),
+      hr(),
+      helpText("Source: (https://www.universityofcalifornia.edu/infocenter). Admissions data were collected for the years 2010-2019 for each UC campus.")
+  ), 
+  box(title = "Academic Year", width = 6,
+  plotOutput("plot", width = "600px", height = "500px")
+  ) 
+  ) 
+  ) 
+)
+
+server <- function(input, output, session) { 
+  
+  output$plot <- renderPlot({
+  UC_admit %>%
+      filter(campus == input$campus) %>%
+  ggplot(aes_string(x = "academic_yr", y="filtered_count_fr",fill = input$x)) +
+  geom_col(position = "dodge")+
+       scale_fill_brewer(palette = "Set1")+
+  theme_light(base_size = 18)+
+     theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+      labs(title = "UC Admission Information",x=NULL,y="Number of Admittees")
+  })
+  
+  session$onSessionEnded(stopApp)
+  }
+
+shinyApp(ui, server)
+```
+
+`<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>`{=html}
 
 ## Push your final code to GitHub!
 Please be sure that you check the `keep md` file in the knit preferences. 
