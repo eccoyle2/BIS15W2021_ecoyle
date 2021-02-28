@@ -144,7 +144,7 @@ shinyApp(ui, server)
 #this is the, in my opinion, better app for the question above
 
 ```{r}
-ui <- dashboardPage(
+ui <- dashboardPage(skin="red",
   dashboardHeader(title = "UC Enrollment"),
   dashboardSidebar(disable = F),
   dashboardBody(selectInput("campus", " Select Campus:", 
@@ -161,8 +161,7 @@ ui <- dashboardPage(
   ) 
   ) 
   ) 
-)
-
+  )
 server <- function(input, output, session) { 
   
   output$plot <- renderPlot({

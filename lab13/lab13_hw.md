@@ -1,7 +1,7 @@
 ---
 title: "Lab 13 Homework"
 author: "Eric Coyle"
-date: "2021-02-26"
+date: "2021-02-27"
 output:
   html_document: 
     theme: spacelab
@@ -254,7 +254,7 @@ shinyApp(ui, server)
 
 
 ```r
-ui <- dashboardPage(
+ui <- dashboardPage(skin="red",
   dashboardHeader(title = "UC Enrollment"),
   dashboardSidebar(disable = F),
   dashboardBody(selectInput("campus", " Select Campus:", 
@@ -271,8 +271,7 @@ ui <- dashboardPage(
   ) 
   ) 
   ) 
-)
-
+  )
 server <- function(input, output, session) { 
   
   output$plot <- renderPlot({
