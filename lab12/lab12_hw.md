@@ -1,7 +1,7 @@
 ---
 title: "Lab 12 Homework"
 author: "Eric Coyle"
-date: "2021-02-23"
+date: "2021-03-01"
 output:
   html_document: 
     theme: spacelab
@@ -76,6 +76,10 @@ grizzly%>%
 ##  3rd Qu.:7387   3rd Qu.:-145.6   3rd Qu.:64.13  
 ##  Max.   :9996   Max.   :-131.3   Max.   :70.37
 ```
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
 
 3. Load a map from `stamen` in a terrain style projection and display the map.
 
@@ -91,7 +95,87 @@ base_map<-get_map(base_map_box, maptype = "terrain", source = "stamen")
 ```
 
 ```
-## Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under ODbL.
+## Source : http://tile.stamen.com/terrain/6/2/18.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/3/18.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/4/18.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/5/18.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/6/18.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/7/18.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/8/18.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/2/19.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/3/19.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/4/19.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/5/19.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/6/19.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/7/19.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/8/19.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/2/20.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/3/20.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/4/20.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/5/20.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/6/20.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/7/20.png
+```
+
+```
+## Source : http://tile.stamen.com/terrain/6/8/20.png
 ```
 
 ```r
@@ -99,6 +183,7 @@ ggmap(base_map)
 ```
 
 ![](lab12_hw_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+</div>
 
 4. Build a final map that overlays the recorded observations of grizzly bears in Alaska.
 

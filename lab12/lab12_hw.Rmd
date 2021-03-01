@@ -46,6 +46,10 @@ glimpse(grizzly)
 grizzly%>%
   summary()
 ```
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
 
 3. Load a map from `stamen` in a terrain style projection and display the map.
 ```{r}
@@ -58,6 +62,7 @@ base_map_box <- make_bbox(long, lat, f = 0.05)
 base_map<-get_map(base_map_box, maptype = "terrain", source = "stamen")
 ggmap(base_map)
 ```
+</div>
 
 4. Build a final map that overlays the recorded observations of grizzly bears in Alaska.
 ```{r}
