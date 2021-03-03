@@ -33,7 +33,7 @@ knitr::opts_chunk$set(fig.width=8, fig.height=6, message=FALSE)
 
 The function read.cross is for importing data into R/qtl.
 ```{r}
-#?read.cross
+?read.cross
 ```
 
 ## Example 1: Identify genomic regions that regulate blood pressure, heart rate, and heart weight
